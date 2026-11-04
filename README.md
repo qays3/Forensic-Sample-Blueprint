@@ -6,15 +6,24 @@ A library of attack samples for DFIR practice. Each sample is a real artifact ma
 
 Use it to practice investigations, test detection rules, train analysts, or build CTF challenges.
 
+## How Samples Are Made
+
+Samples are built three ways: hand written logs from scripts, crafted packets, and captures from real tools in a lab (for example a live Active Directory domain controller driven with impacket, nmap and tcpdump). Because of this mix, most samples are realistic, but a few are only representative and may feel weak or thin next to a real incident. Each sample README says how it was made, so you know what you are looking at.
+
 ## What Each Sample Includes
 
-* The sample files
-* `answer-key.txt`: scenario story, ground truth timeline, MITRE ATT&CK technique IDs, tools and lab setup
-* `hashes.sha256`: SHA256 hash of every file
+Each sample folder holds:
+
+* `<sha256>.zip`: the zip filename is the SHA256 of the sample, password protected with `hidden`, and holds only the evidence files.
+* `README.md`: the scenario story, ground truth timeline, questions with answers, MITRE ATT&CK technique IDs and tools. Kept outside the zip so you can read it here.
 
 ## Safety
 
-Files that hold live malware are zipped with the password `infected`. Open them only inside an isolated VM. No real user data is in any sample.
+Samples are zipped with the password `hidden` so antivirus does not touch them and the answers are not spoiled on sight. No real user data is in any sample. Open files only inside an isolated VM.
+
+## Contributing
+
+This is an open repo and anyone can add samples. To contribute: build your sample inside the right category folder under `samples/`, zip the evidence with the password `hidden` and name the zip after its SHA256, add a `README.md` with the scenario, ground truth timeline, questions with answers and MITRE ATT&CK IDs, then open a pull request. Keep payloads harmless and use no real user data.
 
 ## Attack Catalog
 
@@ -39,26 +48,25 @@ Every attack below lists the sample types that capture it, using these codes. Se
 | CLOUD | Cloud and identity logs | CloudTrail, VPC Flow Logs, Azure Activity, Entra ID sign in and audit, M365 UAL, GCP audit, Kubernetes audit |
 | MAIL | Email | .eml, .msg, .pst, message trace, headers |
 | FILE | Attack file sample | Documents, scripts, PE files, ISO, LNK, defanged payloads |
-| EDR | EDR and SIEM exports | Process trees, alerts, Wazuh, Splunk, Elastic NDJSON |
 
 ### Reconnaissance
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| TCP SYN scan | PCAP | Many SYN to many ports, RST replies |
-| TCP connect scan | PCAP, EVTX | Full handshakes, firewall 5156/5157 |
-| UDP scan | PCAP | ICMP port unreachable replies |
-| Xmas, NULL, FIN scans | PCAP | Odd TCP flag combos |
-| ACK scan for firewall mapping | PCAP | ACK with no session |
-| Idle (zombie) scan | PCAP | IP ID changes on third host |
-| Ping sweep | PCAP | ICMP echo to whole subnet |
-| ARP sweep | PCAP | ARP requests across subnet |
-| Service and version detection | PCAP | Nmap probes, banner grabs |
-| OS fingerprinting | PCAP | Odd TTL, window size, options |
+| TCP SYN scan | [PCAP](samples/network/tcp-syn-scan) | Many SYN to many ports, RST replies |
+| TCP connect scan | [PCAP](samples/network/tcp-connect-scan), EVTX | Full handshakes, firewall 5156/5157 |
+| UDP scan | [PCAP](samples/network/udp-scan) | ICMP port unreachable replies |
+| Xmas, NULL, FIN scans | [PCAP](samples/network/xmas-null-fin-scans) | Odd TCP flag combos |
+| ACK scan for firewall mapping | [PCAP](samples/network/ack-scan) | ACK with no session |
+| Idle (zombie) scan | [PCAP](samples/network/idle-zombie-scan) | IP ID changes on third host |
+| Ping sweep | [PCAP](samples/network/ping-sweep) | ICMP echo to whole subnet |
+| ARP sweep | [PCAP](samples/network/arp-sweep) | ARP requests across subnet |
+| Service and version detection | [PCAP](samples/network/service-version-detection) | Nmap probes, banner grabs |
+| OS fingerprinting | [PCAP](samples/network/os-fingerprinting) | Odd TTL, window size, options |
 | Nmap NSE script scans | PCAP, WEB | NSE user agent, script payloads |
-| Masscan high rate scan | PCAP | Very high packet rate, fixed source port |
-| Vulnerability scan (Nessus, OpenVAS, Nuclei) | PCAP, WEB | Thousands of probe URLs, scanner user agents |
-| Web directory brute force (Gobuster, ffuf, Dirb) | WEB, PCAP | Burst of 404s from one IP |
+| Masscan high rate scan | [PCAP](samples/network/masscan-high-rate) | Very high packet rate, fixed source port |
+| Vulnerability scan (Nessus, OpenVAS, Nuclei) | [PCAP](samples/network/vulnerability-scan), [WEB](samples/web-logs/web-vulnerability-scanner) | Thousands of probe URLs, scanner user agents |
+| Web directory brute force (Gobuster, ffuf, Dirb) | [WEB](samples/web-logs/directory-brute-force), PCAP | Burst of 404s from one IP |
 | Web crawling and spidering | WEB | Fast sequential page hits |
 | Subdomain brute force | PCAP | Many NXDOMAIN DNS answers |
 | DNS zone transfer (AXFR) | PCAP | AXFR query over TCP 53 |
@@ -113,8 +121,8 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Exploit VPN or firewall appliance (Fortinet, Pulse, Citrix) | PCAP, WEB | Path traversal or RCE strings to appliance |
 | Exploit Exchange (ProxyShell, ProxyLogon) | WEB, EVTX, DISK | Autodiscover abuse, aspx webshell |
 | Log4Shell | WEB, PCAP | jndi ldap strings, LDAP callback |
-| Exposed RDP brute force | EVTX, PCAP | 4625 storm then 4624 type 10 |
-| Exposed SSH brute force | LNX, PCAP | Failed password lines then accepted |
+| Exposed RDP brute force | EVTX, [PCAP](samples/network/rdp-brute-force) | 4625 storm then 4624 type 10 |
+| Exposed SSH brute force | [LNX](samples/linux-macos/ssh-brute-force-then-login), [PCAP](samples/network/ssh-brute-force) | Failed password lines then accepted |
 | Valid stolen accounts | EVTX, CLOUD | Login from new IP, country, device |
 | Password spraying | EVTX, CLOUD | One password, many users, 4771 or 50126 |
 | Credential stuffing | WEB, CLOUD | Leaked combos against login page |
@@ -137,7 +145,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| PowerShell encoded command | EVTX, MEM, EDR | 4104 script block, 4688 with -enc |
+| PowerShell encoded command | EVTX, MEM | 4104 script block, 4688 with -enc |
 | PowerShell download cradle (IEX, DownloadString) | EVTX, PCAP | Net.WebClient, Invoke-WebRequest |
 | PowerShell without powershell.exe (Unmanaged) | EVTX, MEM | System.Management.Automation.dll in odd process |
 | PowerShell v2 downgrade | EVTX | EngineVersion 2.0 in 400 event |
@@ -155,7 +163,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | WMIC XSL remote script | EVTX, PCAP | wmic /format:http |
 | Scheduled task one time run | EVTX, DISK | 4698, Tasks folder XML |
 | Service execution (sc create) | EVTX, REG | 7045, new Services key |
-| Native API and direct syscalls | MEM, EDR | Unbacked memory calling syscalls |
+| Native API and direct syscalls | MEM | Unbacked memory calling syscalls |
 | Shared modules (LoadLibrary of payload) | MEM, EVTX | Sysmon 7 unsigned DLL load |
 | User execution of malicious file | EXEC, MFT, EVTX | Explorer parent, Downloads path |
 | Office macro (VBA) | FILE, EVTX | Office child process, VBA in file |
@@ -166,7 +174,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Container admin command (docker exec) | LNX | Docker daemon logs |
 | Cloud run command (SSM, Azure Run Command) | CLOUD, EVTX | SendCommand or RunCommand events |
 | Python, Node, Perl inline payloads | LNX, EVTX | Interpreter with -c argument |
-| Unix shell reverse shell | LNX, PCAP | bash -i to /dev/tcp |
+| Unix shell reverse shell | LNX, [PCAP](samples/network/reverse-shell-plain) | bash -i to /dev/tcp |
 | AutoHotKey and AutoIT scripts | FILE, EXEC | Compiled AutoIT binaries |
 | JavaScript in LNK or Windows Script Components | FILE, EVTX | .sct, .wsc files |
 | Inter process via COM (MMC20, ShellWindows) | EVTX, PCAP | DCOM spawning mmc or explorer child |
@@ -222,12 +230,12 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Bootkit and MBR or VBR change | DISK | Modified boot sectors |
 | UEFI implant | DISK | Changed ESP files |
 | Remote access tool install (AnyDesk, ScreenConnect) | EVTX, REG, PCAP | New service and outbound to vendor |
-| Linux cron job | LNX | New crontab line |
-| Linux systemd service or timer | LNX | New unit file |
-| SSH authorized\_keys | LNX | New key line, file mtime |
-| bashrc, profile modification | LNX | Added reverse shell line |
-| LD\_PRELOAD and ld.so.preload | LNX | New entry in ld.so.preload |
-| PAM backdoor | LNX | Modified pam\_unix.so |
+| Linux cron job | [LNX](samples/linux-macos/cron-persistence) | New crontab line |
+| Linux systemd service or timer | [LNX](samples/linux-macos/systemd-service-persistence) | New unit file |
+| SSH authorized\_keys | [LNX](samples/linux-macos/authorized-keys-persistence) | New key line, file mtime |
+| bashrc, profile modification | [LNX](samples/linux-macos/bashrc-persistence) | Added reverse shell line |
+| LD\_PRELOAD and ld.so.preload | [LNX](samples/linux-macos/ld-preload-persistence) | New entry in ld.so.preload |
+| PAM backdoor | [LNX](samples/linux-macos/pam-backdoor) | Modified pam\_unix.so |
 | Kernel module rootkit | LNX, MEM | Hidden module in memory |
 | macOS LaunchAgent and LaunchDaemon | LNX | New plist in LaunchAgents |
 | Cloud access key creation | CLOUD | CreateAccessKey for other user |
@@ -260,12 +268,12 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | noPac (sAMAccountName spoof) | EVTX | 4741 then rename to DC name |
 | GPO abuse for privilege | EVTX, DISK | 5136 on GPO, new task in SYSVOL |
 | DACL abuse (GenericAll, WriteDACL) | EVTX | 5136, 4662 |
-| Linux sudo misconfig | LNX | sudo log of GTFOBins command |
-| Linux SUID binary abuse | LNX | find with exec as root |
-| Linux capabilities abuse | LNX | cap\_setuid on python |
-| Linux kernel exploit (Dirty Pipe, PwnKit) | LNX, MEM | pkexec crash, odd binaries in tmp |
-| Writable cron or PATH hijack | LNX | Root cron script modified |
-| Docker group or socket escape | LNX | docker run with host mount |
+| Linux sudo misconfig | [LNX](samples/linux-macos/sudo-gtfobins-abuse) | sudo log of GTFOBins command |
+| Linux SUID binary abuse | [LNX](samples/linux-macos/suid-binary-abuse) | find with exec as root |
+| Linux capabilities abuse | [LNX](samples/linux-macos/capabilities-abuse) | cap\_setuid on python |
+| Linux kernel exploit (Dirty Pipe, PwnKit) | [LNX](samples/linux-macos/pwnkit-style-escalation), MEM | pkexec crash, odd binaries in tmp |
+| Writable cron or PATH hijack | [LNX](samples/linux-macos/writable-cron-hijack) | Root cron script modified |
+| Docker group or socket escape | [LNX](samples/linux-macos/docker-group-escape) | docker run with host mount |
 | Container escape (privileged container) | LNX, CLOUD | Host namespace access |
 | Cloud IAM escalation (PassRole, attach policy) | CLOUD | AttachUserPolicy, PassRole calls |
 | Azure role assignment escalation | CLOUD | New Owner role assignment |
@@ -316,7 +324,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Rootkit (user mode hooks) | MEM | IAT, inline hooks |
 | Rootkit (kernel DKOM) | MEM | Unlinked EPROCESS |
 | Indicator removal on host (history clear) | LNX, REG | Empty bash\_history, unset HISTFILE |
-| Log tampering on Linux | LNX | wtmp edits, gaps in auth.log |
+| Log tampering on Linux | [LNX](samples/linux-macos/wtmp-tampering) | wtmp edits, gaps in auth.log |
 | Disable auditd or SELinux | LNX | auditctl -e 0, setenforce 0 |
 | Hide artifacts in VM or sandbox evasion | MEM, FILE | Checks for VM drivers |
 | Domain policy change (GPO weaken) | EVTX | 5136 security policy |
@@ -340,15 +348,15 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | NTDS.dit theft (ntdsutil IFM, vssadmin) | EVTX, MFT | ntdsutil, shadow copy create, 325 ESENT |
 | DCSync | EVTX, PCAP | 4662 with replication GUIDs from non DC |
 | DCShadow | EVTX, PCAP | New DC object registered then removed |
-| Kerberoasting | EVTX, PCAP | 4769 RC4 (0x17) for SPN accounts |
-| AS-REP roasting | EVTX, PCAP | 4768 with no preauth |
+| Kerberoasting | EVTX, [PCAP](samples/network/kerberoasting-traffic) | 4769 RC4 (0x17) for SPN accounts |
+| AS-REP roasting | EVTX, [PCAP](samples/network/asrep-roasting-traffic) | 4768 with no preauth |
 | Kerberos brute force | EVTX, PCAP | 4771 failures |
-| Password spraying (LDAP, SMB, Kerberos) | EVTX, PCAP | One password, many accounts |
+| Password spraying (LDAP, SMB, Kerberos) | EVTX, [PCAP](samples/network/password-spray) | One password, many accounts |
 | Brute force local | EVTX | 4625 burst |
-| LLMNR and NBT-NS poisoning (Responder) | PCAP, EVTX | Spoofed name replies, NTLM hash capture |
-| WPAD spoofing | PCAP | Rogue wpad.dat |
-| NTLM relay (ntlmrelayx) | PCAP, EVTX | 4624 from relay IP, signing off |
-| Coerced auth (PetitPotam, PrinterBug, DFSCoerce) | PCAP, EVTX | EFSRPC, MS-RPRN calls to attacker |
+| LLMNR and NBT-NS poisoning (Responder) | [PCAP](samples/network/llmnr-nbtns-poisoning), EVTX | Spoofed name replies, NTLM hash capture |
+| WPAD spoofing | [PCAP](samples/network/wpad-spoofing) | Rogue wpad.dat |
+| NTLM relay (ntlmrelayx) | [PCAP](samples/network/ntlm-relay), EVTX | 4624 from relay IP, signing off |
+| Coerced auth (PetitPotam, PrinterBug, DFSCoerce) | [PCAP](samples/network/coerced-auth-petitpotam), EVTX | EFSRPC, MS-RPRN calls to attacker |
 | Shadow credentials | EVTX | msDS-KeyCredentialLink change |
 | Pass the Hash | EVTX | 4624 type 3 NTLM, logon process NtLmSsp |
 | Pass the Ticket | EVTX, MEM | Ticket use with no TGT request |
@@ -366,12 +374,12 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Credentials in registry (Winlogon AutoLogon) | REG | DefaultPassword value |
 | KeePass and password manager theft | MEM, MFT | KeePass process dump, kdbx copy |
 | WiFi password dump | EVTX | netsh wlan show profile key=clear |
-| Linux /etc/shadow theft | LNX | Read of shadow, unshadow |
-| SSH private key theft | LNX | Read of id\_rsa |
+| Linux /etc/shadow theft | [LNX](samples/linux-macos/shadow-file-read) | Read of shadow, unshadow |
+| SSH private key theft | [LNX](samples/linux-macos/ssh-key-theft) | Read of id\_rsa |
 | Linux memory credential dump (mimipenguin) | LNX, MEM | Access to process memory |
-| Network sniffing of cleartext creds | PCAP | FTP, Telnet, HTTP basic, POP3 creds |
+| Network sniffing of cleartext creds | [PCAP](samples/network/cleartext-creds-sniffing) | FTP, Telnet, HTTP basic, POP3 creds |
 | Cloud instance metadata theft (IMDS) | CLOUD, PCAP, WEB | 169.254.169.254 requests, SSRF |
-| Cloud keys in code or env files | DISK, LNX | .aws credentials read |
+| Cloud keys in code or env files | DISK, [LNX](samples/linux-macos/cloud-creds-file-read) | .aws credentials read |
 | Session token theft (Entra PRT, cookies) | CLOUD, MEM | Token replay from new device |
 | Steal app access token | CLOUD | Token use from odd IP |
 | MFA interception or SIM swap | CLOUD | MFA method change |
@@ -405,7 +413,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Virtualization and sandbox check | MEM, FILE | VM artifact queries |
 | Browser bookmark and history discovery | BROW | Reads of bookmarks file |
 | Password policy and GPO discovery | EVTX, PCAP | SYSVOL reads |
-| Linux recon (id, uname, ps, ss, cat /etc/passwd) | LNX | Commands in history or auditd |
+| Linux recon (id, uname, ps, ss, cat /etc/passwd) | [LNX](samples/linux-macos/linux-recon-commands) | Commands in history or auditd |
 | Cloud recon (enumerate IAM, buckets, VMs) | CLOUD | Burst of List and Describe calls |
 | Azure AD recon (AzureHound, ROADtools) | CLOUD | Graph API burst from one token |
 | Kubernetes recon (kubectl get all) | CLOUD | Audit log list calls |
@@ -422,7 +430,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | WinRM and PowerShell remoting | EVTX, PCAP | wsmprovhost.exe, 5985 traffic, 91 and 168 events |
 | RDP | EVTX, PCAP, REG | 4624 type 10, 1149, 21, 22, 25 |
 | RDP hijack (tscon) | EVTX | tscon as SYSTEM |
-| SSH lateral (Linux) | LNX, PCAP | Accepted publickey from internal host |
+| SSH lateral (Linux) | [LNX](samples/linux-macos/ssh-lateral-movement), PCAP | Accepted publickey from internal host |
 | SMB admin share copy | EVTX, PCAP, MFT | 5145 C$ writes |
 | Remote scheduled task | EVTX, PCAP | 4698 from remote, ATSVC pipe |
 | Remote service creation (sc \\host) | EVTX, PCAP | 7045 from SVCCTL pipe |
@@ -459,7 +467,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Audio and video capture | REG, MEM | CapabilityAccessManager mic and webcam keys |
 | Keylogging output | MFT | Log file growth |
 | Clipboard data | MEM | Clipboard polling |
-| Database dump | LNX, EVTX, PCAP | mysqldump, sqlcmd export |
+| Database dump | [LNX](samples/linux-macos/database-dump), EVTX, PCAP | mysqldump, sqlcmd export |
 | Code repository clone | CLOUD, PCAP | git clone of many repos |
 | Data from cloud storage (S3 sync) | CLOUD | GetObject burst |
 | Browser data collection | BROW, MFT | Copy of browser profile |
@@ -470,31 +478,31 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| HTTP beaconing | PCAP, MEM, EDR | Regular interval, same size requests |
-| HTTPS beaconing | PCAP | JA3 and JA4 hash, self signed cert |
-| Cobalt Strike default profile | PCAP, MEM | Known URIs, beacon config in memory |
+| HTTP beaconing | [PCAP](samples/network/http-beacon-jitter), MEM | Regular interval, same size requests |
+| HTTPS beaconing | [PCAP](samples/network/https-beacon-self-signed) | JA3 and JA4 hash, self signed cert |
+| Cobalt Strike default profile | [PCAP](samples/network/cobalt-strike-like-profile), MEM | Known URIs, beacon config in memory |
 | Sliver, Havoc, Mythic, Brute Ratel | PCAP, MEM | Framework specific URIs and certs |
 | Metasploit Meterpreter | PCAP, MEM | Port 4444, reflective DLL in memory |
 | Empire and PowerShell C2 | PCAP, EVTX | Base64 cookies, 4104 stagers |
 | DNS C2 and tunneling (dnscat2, iodine) | PCAP | Long random subdomains, TXT records |
-| DNS over HTTPS C2 | PCAP | Traffic to DoH resolvers from odd process |
-| ICMP tunneling | PCAP | Large or patterned ICMP payloads |
-| Domain fronting | PCAP | SNI differs from Host header |
+| DNS over HTTPS C2 | [PCAP](samples/network/dns-over-https-c2) | Traffic to DoH resolvers from odd process |
+| ICMP tunneling | [PCAP](samples/network/icmp-tunnel) | Large or patterned ICMP payloads |
+| Domain fronting | [PCAP](samples/network/domain-fronting) | SNI differs from Host header |
 | CDN and cloud fronted C2 | PCAP | Beacons to CloudFront, Azure edge |
-| C2 over legit web services (Telegram, Discord, Slack, GitHub) | PCAP, MEM | API calls from non browser process |
+| C2 over legit web services (Telegram, Discord, Slack, GitHub) | [PCAP](samples/network/c2-over-telegram), MEM | API calls from non browser process |
 | C2 over email | MAIL, PCAP | IMAP polling by malware |
-| SMB named pipe peer to peer C2 | PCAP, MEM | Pipe names between internal hosts |
-| Reverse SSH tunnel | PCAP, LNX | ssh -R to external host |
+| SMB named pipe peer to peer C2 | [PCAP](samples/network/smb-named-pipe-c2), MEM | Pipe names between internal hosts |
+| Reverse SSH tunnel | [PCAP](samples/network/reverse-ssh-tunnel), LNX | ssh -R to external host |
 | Proxy and port forward (chisel, ligolo, plink) | PCAP, EVTX, MFT | New binary and long lived connection |
-| SOCKS proxy through compromised host | PCAP | Many internal connections from one host |
-| Tor C2 | PCAP | Tor node IPs, tor.exe |
-| Ngrok and tunneling services | PCAP | ngrok.io domains |
-| Non standard port | PCAP | HTTP over 8443, 53 non DNS |
+| SOCKS proxy through compromised host | [PCAP](samples/network/socks-proxy-pivot) | Many internal connections from one host |
+| Tor C2 | [PCAP](samples/network/tor-traffic) | Tor node IPs, tor.exe |
+| Ngrok and tunneling services | [PCAP](samples/network/ngrok-tunnel) | ngrok.io domains |
+| Non standard port | [PCAP](samples/network/non-standard-port-c2) | HTTP over 8443, 53 non DNS |
 | Protocol impersonation | PCAP | Fake TLS or HTTP |
-| Fast flux and DGA domains | PCAP | Many random domain lookups, NXDOMAIN |
+| Fast flux and DGA domains | [PCAP](samples/network/dga-domains) | Many random domain lookups, NXDOMAIN |
 | Ingress tool transfer | PCAP, MFT, EVTX | Download then new file and execution |
 | Remote access software as C2 | PCAP, EVTX | AnyDesk, ScreenConnect sessions |
-| WebSocket C2 | PCAP | Upgrade headers to odd host |
+| WebSocket C2 | [PCAP](samples/network/websocket-c2) | Upgrade headers to odd host |
 | Covert channel in headers or cookies | PCAP | Encoded data in cookies |
 
 ### Exfiltration
@@ -502,14 +510,14 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | Exfil over C2 channel | PCAP, EXEC | Large upload on beacon channel, SRUM bytes sent |
-| Exfil over HTTP POST | PCAP, WEB | Big POST bodies |
+| Exfil over HTTP POST | [PCAP](samples/network/http-post-exfil), WEB | Big POST bodies |
 | Rclone to cloud (Mega, S3, Dropbox) | EVTX, PCAP, MFT | rclone.conf, rclone.exe in Prefetch |
 | MEGAsync, WinSCP, FileZilla | EXEC, REG, PCAP | Tool install and big uploads |
-| FTP and SFTP exfil | PCAP, LNX | STOR commands |
-| DNS exfil | PCAP | Encoded data in queries |
-| ICMP exfil | PCAP | Data in echo payloads |
+| FTP and SFTP exfil | [PCAP](samples/network/ftp-exfil), LNX | STOR commands |
+| DNS exfil | [PCAP](samples/network/dns-exfil) | Encoded data in queries |
+| ICMP exfil | [PCAP](samples/network/icmp-exfil) | Data in echo payloads |
 | Email exfil | MAIL, CLOUD | Attachments to personal address |
-| Exfil to webhook or paste site | PCAP, BROW | Pastebin, webhook.site posts |
+| Exfil to webhook or paste site | [PCAP](samples/network/exfil-to-paste-site), BROW | Pastebin, webhook.site posts |
 | Exfil to GitHub or code repo | PCAP | git push to new repo |
 | USB exfil | REG, MFT, EXEC, EVTX | USB serial, LNK to removable drive, 6416 |
 | Bluetooth exfil | REG | Bluetooth device pairing keys |
@@ -518,7 +526,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Cloud snapshot share to other account | CLOUD | ModifySnapshotAttribute, CreateImage |
 | S3 bucket made public | CLOUD | PutBucketPolicy with public read |
 | Database export over network | PCAP | Big SQL result sets |
-| Scheduled or throttled exfil | PCAP | Small chunks at fixed times |
+| Scheduled or throttled exfil | [PCAP](samples/network/slow-chunked-exfil) | Small chunks at fixed times |
 | Exfil via steganography | PCAP, FILE | Images uploaded with hidden data |
 | Insider personal email upload | BROW, PCAP | Gmail upload of company files |
 
@@ -533,14 +541,14 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Backup deletion | EVTX, CLOUD | Backup job delete, vault delete |
 | Disk wipe (wiper malware) | DISK, EVTX | Overwritten MBR and files |
 | MBR overwrite | DISK | Changed sector 0 |
-| Data destruction (cipher, sdelete, rm -rf) | MFT, LNX | Mass delete records |
+| Data destruction (cipher, sdelete, rm -rf) | MFT, [LNX](samples/linux-macos/mass-file-deletion) | Mass delete records |
 | Data manipulation | DISK, LNX | Changed DB records or files |
-| Defacement | WEB, MFT | index page changed |
+| Defacement | [WEB](samples/web-logs/defacement), MFT | index page changed |
 | Service stop (databases, AV before encryption) | EVTX | 7036 stops, net stop burst |
 | Account lockout or removal | EVTX, CLOUD | 4740, 4726 mass |
 | Password change of admins | EVTX, CLOUD | 4724 burst |
 | System shutdown and reboot | EVTX | 1074, 6006 |
-| Resource hijacking (cryptomining) | LNX, PCAP, EVTX | xmrig, stratum protocol, high CPU |
+| Resource hijacking (cryptomining) | [LNX](samples/linux-macos/cryptominer), PCAP, EVTX | xmrig, stratum protocol, high CPU |
 | Cloud cryptomining | CLOUD | RunInstances of GPU types in new regions |
 | DoS flood (SYN, UDP, HTTP) | PCAP, WEB | High rate from many IPs |
 | Application layer DoS (Slowloris) | PCAP, WEB | Many open slow connections |
@@ -557,10 +565,10 @@ Linux items already listed in earlier sections are not repeated here.
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | Webshell on Linux web server | WEB, LNX, DISK | www-data spawning bash |
-| Reverse shell (bash, nc, python, socat) | LNX, PCAP | Outbound shell to odd port |
-| Bind shell | LNX, PCAP | New listener on high port |
-| Cryptominer dropper (curl pipe sh) | LNX, PCAP | curl or wget to /tmp then chmod +x |
-| Malware in /tmp or /dev/shm | LNX, DISK | Executable in memory backed folders |
+| Reverse shell (bash, nc, python, socat) | [LNX](samples/linux-macos/reverse-shell-from-webapp), [PCAP](samples/network/reverse-shell-plain) | Outbound shell to odd port |
+| Bind shell | [LNX](samples/linux-macos/bind-shell), PCAP | New listener on high port |
+| Cryptominer dropper (curl pipe sh) | [LNX](samples/linux-macos/curl-pipe-sh-dropper), PCAP | curl or wget to /tmp then chmod +x |
+| Malware in /tmp or /dev/shm | [LNX](samples/linux-macos/binary-in-tmp-devshm), DISK | Executable in memory backed folders |
 | Deleted running binary | LNX, MEM | /proc/pid/exe shows deleted |
 | Fileless memfd\_create execution | LNX, MEM | memfd: in process maps |
 | Process hiding with libprocesshider | LNX, MEM | ld.so.preload library |
@@ -570,10 +578,10 @@ Linux items already listed in earlier sections are not repeated here.
 | SSH brute force botnet (Mirai style) | LNX, PCAP | Telnet and SSH brute force then busybox |
 | Docker container breakout | LNX, DISK | Host files written from container |
 | Malicious Docker image | DISK, LNX | Image with miner layer |
-| Auditd evasion | LNX | Rules removed |
-| journalctl vacuum and log wipe | LNX | Short journal, gaps |
-| Shell history tampering | LNX | HISTSIZE 0, history -c |
-| Timestomp with touch | LNX, DISK | ctime newer than mtime |
+| Auditd evasion | [LNX](samples/linux-macos/auditd-disabled) | Rules removed |
+| journalctl vacuum and log wipe | [LNX](samples/linux-macos/journal-vacuum) | Short journal, gaps |
+| Shell history tampering | [LNX](samples/linux-macos/history-wipe) | HISTSIZE 0, history -c |
+| Timestomp with touch | [LNX](samples/linux-macos/touch-timestomp), DISK | ctime newer than mtime |
 | sudo token reuse | LNX | sudo with no password prompt |
 | Exploit of web app to RCE (e.g. CMS plugin) | WEB, LNX | POST to plugin path then shell |
 | macOS malicious LaunchAgent | LNX, DISK | New plist |
@@ -582,6 +590,11 @@ Linux items already listed in earlier sections are not repeated here.
 | macOS TCC database tamper | DISK | TCC.db changes |
 | macOS keychain theft | LNX, DISK | security dump-keychain |
 | macOS infostealer (Atomic, Poseidon) | FILE, LNX, PCAP | DMG install, data posted out |
+| Hidden UID 0 account created | [LNX](samples/linux-macos/new-local-user) | useradd -o -u 0 creates a root equivalent account |
+| SELinux set to permissive | [LNX](samples/linux-macos/selinux-disabled) | setenforce 0 and config change drop MAC protections |
+| SSH password spray (one password, many accounts) | [LNX](samples/linux-macos/ssh-password-spray) | One failed login per user, one eventual success |
+| systemd timer persistence | [LNX](samples/linux-macos/systemd-timer-persistence) | A .timer unit runs a payload on a schedule |
+| Tar staging and scp exfil | [LNX](samples/linux-macos/tar-staging-and-scp-exfil) | Archive of a share then scp out, then cleanup |
 
 ### Cloud and Identity Attacks
 
@@ -646,89 +659,90 @@ All of these produce CLOUD samples. Extra sample types are noted where they help
 
 All of these produce WEB and PCAP samples. Capture HTTP in clear text or decrypt TLS with a key log file so the payloads show in the pcap.
 
-| Attack | Key evidence |
-| --- | --- |
-| SQL injection (union, error, boolean, time based) | UNION SELECT, sleep, quotes in parameters |
-| sqlmap automated SQLi | sqlmap user agent, huge request count |
-| Blind SQLi data dump | Many requests with changing char positions |
-| NoSQL injection | `$ne`, `$gt` operators in JSON |
-| Reflected XSS | script tags in GET parameters |
-| Stored XSS | Script in POST, later served to users |
-| DOM XSS | Payload in URL fragment (BROW) |
-| CSRF | Cross origin POST with no token |
-| Command injection | Semicolons, pipes, backticks in parameters |
-| Local file inclusion | ../../etc/passwd, php://filter |
-| Remote file inclusion | Parameter with external URL |
-| Path traversal | Encoded dot dot slash sequences |
-| File upload to webshell | Upload of .php, .aspx, double extension |
-| Webshell usage (China Chopper, Godzilla, Behinder) | Encrypted POST bodies to one file |
-| SSRF | Requests to 169.254.169.254, localhost |
-| XXE | DOCTYPE with external entity |
-| Insecure deserialization (Java, PHP, .NET) | ysoserial gadget bytes, O: serialized objects |
-| Server side template injection | {{7\*7}} style payloads |
-| Log4Shell and JNDI injection | jndi ldap strings in headers |
-| Spring4Shell | class.module.classLoader parameters |
-| Shellshock | () { :; }; in headers |
-| HTTP request smuggling | Conflicting Content-Length and Transfer-Encoding |
-| Host header injection | Odd Host value in reset links |
-| Open redirect abuse | Redirect parameter to evil site |
-| IDOR | Sequential ID changes by one user |
-| Broken auth and JWT tampering | alg none, changed claims |
-| Session hijacking | Same session cookie from two IPs |
-| Login brute force | POST burst to login page |
-| Credential stuffing | Many users, one try each |
-| Account takeover by password reset abuse | Reset flood, token reuse |
-| API abuse and enumeration | Burst on API endpoints, 401 and 403 |
-| GraphQL introspection and batching | \_\_schema queries |
-| Mass assignment | Extra role fields in JSON |
-| Clickjacking | Page framed by other site (BROW) |
-| Web cache poisoning | Unkeyed headers with payload |
-| WordPress plugin exploit | wp-content plugin path exploit |
-| Directory listing and backup file hunting | Requests for .bak, .git, .env |
-| Exposed .git and .env download | 200 on /.git/config |
-| Web scraping bots | Fast sequential crawl |
-| Layer 7 DDoS | Flood on heavy endpoints |
+| Attack | Samples | Key evidence |
+| --- | --- | --- |
+| SQL injection (union, error, boolean, time based) | [WEB](samples/web-logs/sqli-union-error-blind) | UNION SELECT, sleep, quotes in parameters |
+| sqlmap automated SQLi | [WEB](samples/web-logs/sqlmap-automated) | sqlmap user agent, huge request count |
+| Blind SQLi data dump | WEB | Many requests with changing char positions |
+| NoSQL injection | [WEB](samples/web-logs/nosql-injection) | `$ne`, `$gt` operators in JSON |
+| Reflected XSS | [WEB](samples/web-logs/reflected-xss) | script tags in GET parameters |
+| Stored XSS | [WEB](samples/web-logs/stored-xss) | Script in POST, later served to users |
+| DOM XSS | WEB | Payload in URL fragment (BROW) |
+| CSRF | WEB | Cross origin POST with no token |
+| Command injection | [WEB](samples/web-logs/command-injection) | Semicolons, pipes, backticks in parameters |
+| Local file inclusion | [WEB](samples/web-logs/lfi-path-traversal) | ../../etc/passwd, php://filter |
+| Remote file inclusion | [WEB](samples/web-logs/rfi) | Parameter with external URL |
+| Path traversal | [WEB](samples/web-logs/lfi-path-traversal) | Encoded dot dot slash sequences |
+| File upload to webshell | [WEB](samples/web-logs/file-upload-webshell) | Upload of .php, .aspx, double extension |
+| Webshell usage (China Chopper, Godzilla, Behinder) | [WEB](samples/web-logs/webshell-usage) | Encrypted POST bodies to one file |
+| SSRF | [WEB](samples/web-logs/ssrf-metadata) | Requests to 169.254.169.254, localhost |
+| XXE | [WEB](samples/web-logs/xxe) | DOCTYPE with external entity |
+| Insecure deserialization (Java, PHP, .NET) | [WEB](samples/web-logs/deserialization) | ysoserial gadget bytes, O: serialized objects |
+| Server side template injection | [WEB](samples/web-logs/ssti) | {{7\*7}} style payloads |
+| Log4Shell and JNDI injection | [WEB](samples/web-logs/log4shell-strings) | jndi ldap strings in headers |
+| Spring4Shell | [WEB](samples/web-logs/spring4shell) | class.module.classLoader parameters |
+| Shellshock | [WEB](samples/web-logs/shellshock) | () { :; }; in headers |
+| HTTP request smuggling | [WEB](samples/web-logs/http-request-smuggling) | Conflicting Content-Length and Transfer-Encoding |
+| Host header injection | WEB | Odd Host value in reset links |
+| Open redirect abuse | [WEB](samples/web-logs/open-redirect) | Redirect parameter to evil site |
+| IDOR | [WEB](samples/web-logs/idor-enumeration) | Sequential ID changes by one user |
+| Broken auth and JWT tampering | [WEB](samples/web-logs/jwt-tampering) | alg none, changed claims |
+| Session hijacking | [WEB](samples/web-logs/session-hijack) | Same session cookie from two IPs |
+| Login brute force | [WEB](samples/web-logs/login-brute-force) | POST burst to login page |
+| Credential stuffing | [WEB](samples/web-logs/credential-stuffing) | Many users, one try each |
+| Account takeover by password reset abuse | [WEB](samples/web-logs/password-reset-abuse) | Reset flood, token reuse |
+| API abuse and enumeration | [WEB](samples/web-logs/api-enumeration) | Burst on API endpoints, 401 and 403 |
+| GraphQL introspection and batching | [WEB](samples/web-logs/graphql-introspection) | \_\_schema queries |
+| Mass assignment | WEB | Extra role fields in JSON |
+| Clickjacking | WEB | Page framed by other site (BROW) |
+| Web cache poisoning | WEB | Unkeyed headers with payload |
+| WordPress plugin exploit | [WEB](samples/web-logs/wordpress-plugin-exploit) | wp-content plugin path exploit |
+| Directory listing and backup file hunting | [WEB](samples/web-logs/backup-file-hunting) | Requests for .bak, .git, .env |
+| Exposed .git and .env download | [WEB](samples/web-logs/exposed-git-env) | 200 on /.git/config |
+| Web scraping bots | [WEB](samples/web-logs/web-crawling) | Fast sequential crawl |
+| Layer 7 DDoS | [WEB](samples/web-logs/layer7-flood) | Flood on heavy endpoints |
+| WAF block and bypass | [WEB](samples/web-logs/waf-blocks-and-bypass) | WAF 403s on obvious payloads, then an obfuscated variant returns 200 |
 
 ### Network and Infrastructure Attacks
 
 All of these produce PCAP samples. Add device logs (router, switch, firewall syslog) where you can.
 
-| Attack | Key evidence |
-| --- | --- |
-| ARP spoofing and MITM | Duplicate IP to MAC mappings, gratuitous ARP |
-| DHCP spoofing (rogue DHCP) | Two DHCP servers answering |
-| DHCP starvation | Flood of DISCOVER with random MACs |
-| DNS spoofing and cache poisoning | Fake answers, mismatched TXID |
-| DNS hijack by changed resolver | Clients using unknown DNS server |
-| IPv6 RA spoofing and mitm6 | Rogue router advertisements, DHCPv6 replies |
-| MAC flooding | CAM table overflow traffic |
-| VLAN hopping (double tagging, DTP) | Double 802.1Q tags, DTP frames |
-| STP manipulation | BPDU claiming root bridge |
-| HSRP and VRRP hijack | Higher priority hello from attacker |
-| BGP hijack | Route announce changes (device logs) |
-| SSL stripping | HTTPS downgraded to HTTP |
-| TLS downgrade and weak cipher | Old TLS versions negotiated |
-| SMB relay | SMB auth forwarded to other host |
-| SYN flood | Many half open connections |
-| UDP flood | High UDP rate to one target |
-| Ping of death and fragmentation attacks | Overlapping or huge fragments |
-| Smurf and Fraggle | ICMP or UDP to broadcast |
-| NTP and DNS amplification | Small queries, huge replies |
-| Teardrop and LAND attacks | Bad fragment offsets, same src and dst |
-| Session hijacking TCP | Injected packets with right sequence numbers |
-| Telnet and FTP cleartext abuse | Plain text creds and commands |
-| SNMP default community abuse | public or private strings, SET requests |
-| Modbus and DNP3 attacks (ICS) | Write coil or register commands from new host |
-| S7comm PLC stop | Stop CPU function codes |
-| VoIP SIP flood and toll fraud | INVITE flood, odd call destinations |
-| WiFi deauth attack | Burst of deauth frames |
-| WiFi WPA handshake capture | EAPOL frames after deauth |
-| WiFi evil twin | Same SSID from new BSSID |
-| WiFi PMKID attack | EAPOL M1 requests to AP |
-| WiFi KRACK | Replayed handshake messages |
-| Bluetooth attacks | HCI logs with odd pairing |
-| Port knocking and covert channels | Odd sequences before port opens |
-| Firewall evasion with fragmentation | Tiny fragments hiding headers |
+| Attack | Samples | Key evidence |
+| --- | --- | --- |
+| ARP spoofing and MITM | [PCAP](samples/network/arp-spoofing-mitm) | Duplicate IP to MAC mappings, gratuitous ARP |
+| DHCP spoofing (rogue DHCP) | [PCAP](samples/network/rogue-dhcp) | Two DHCP servers answering |
+| DHCP starvation | [PCAP](samples/network/dhcp-starvation) | Flood of DISCOVER with random MACs |
+| DNS spoofing and cache poisoning | [PCAP](samples/network/dns-spoofing) | Fake answers, mismatched TXID |
+| DNS hijack by changed resolver | PCAP | Clients using unknown DNS server |
+| IPv6 RA spoofing and mitm6 | [PCAP](samples/network/ipv6-ra-mitm) | Rogue router advertisements, DHCPv6 replies |
+| MAC flooding | [PCAP](samples/network/mac-flooding) | CAM table overflow traffic |
+| VLAN hopping (double tagging, DTP) | [PCAP](samples/network/vlan-hopping) | Double 802.1Q tags, DTP frames |
+| STP manipulation | [PCAP](samples/network/stp-root-hijack) | BPDU claiming root bridge |
+| HSRP and VRRP hijack | PCAP | Higher priority hello from attacker |
+| BGP hijack | PCAP | Route announce changes (device logs) |
+| SSL stripping | [PCAP](samples/network/ssl-stripping) | HTTPS downgraded to HTTP |
+| TLS downgrade and weak cipher | [PCAP](samples/network/tls-downgrade) | Old TLS versions negotiated |
+| SMB relay | [PCAP](samples/network/smb-relay) | SMB auth forwarded to other host |
+| SYN flood | [PCAP](samples/network/syn-flood) | Many half open connections |
+| UDP flood | [PCAP](samples/network/udp-flood) | High UDP rate to one target |
+| Ping of death and fragmentation attacks | PCAP | Overlapping or huge fragments |
+| Smurf and Fraggle | PCAP | ICMP or UDP to broadcast |
+| NTP and DNS amplification | [PCAP](samples/network/dns-amplification) | Small queries, huge replies |
+| Teardrop and LAND attacks | [PCAP](samples/network/teardrop-fragmentation) | Bad fragment offsets, same src and dst |
+| Session hijacking TCP | PCAP | Injected packets with right sequence numbers |
+| Telnet and FTP cleartext abuse | PCAP | Plain text creds and commands |
+| SNMP default community abuse | PCAP | public or private strings, SET requests |
+| Modbus and DNP3 attacks (ICS) | PCAP | Write coil or register commands from new host |
+| S7comm PLC stop | PCAP | Stop CPU function codes |
+| VoIP SIP flood and toll fraud | PCAP | INVITE flood, odd call destinations |
+| WiFi deauth attack | [PCAP](samples/network/wifi-deauth) | Burst of deauth frames |
+| WiFi WPA handshake capture | [PCAP](samples/network/wifi-wpa-handshake) | EAPOL frames after deauth |
+| WiFi evil twin | [PCAP](samples/network/wifi-evil-twin) | Same SSID from new BSSID |
+| WiFi PMKID attack | [PCAP](samples/network/wifi-pmkid-attack) | EAPOL M1 requests to AP |
+| WiFi KRACK | PCAP | Replayed handshake messages |
+| Bluetooth attacks | PCAP | HCI logs with odd pairing |
+| Port knocking and covert channels | PCAP | Odd sequences before port opens |
+| Firewall evasion with fragmentation | PCAP | Tiny fragments hiding headers |
 
 ### Email Attacks
 
@@ -783,26 +797,3 @@ For real malware, do not run it yourself. Use public captures and memory images 
 | Android malware (APK) | FILE, PCAP | Overlay permissions, SMS read |
 | macOS stealers | FILE, LNX, PCAP | DMG, osascript prompts |
 | Linux backdoors (BPFDoor, XorDDoS) | LNX, MEM, PCAP | Magic packet triggers, raw sockets |
-
-### Full Scenario Packs
-
-Each pack chains attacks from the sections above into one case with one answer key.
-
-| Scenario | Attack chain | Samples |
-| --- | --- | --- |
-| Ransomware domain takeover | Phishing ISO, Cobalt Strike, Kerberoasting, PsExec, shadow delete, encryption | MAIL, PCAP, EVTX, MFT, MEM, DISK |
-| Insider data theft | Normal login, share browsing, archive, USB copy, cloud upload | REG, EXEC, MFT, BROW, CLOUD |
-| Web server compromise | Directory brute force, SQLi, webshell upload, privilege escalation, miner | WEB, PCAP, LNX, DISK, MEM |
-| Cloud breach | Leaked key, IAM escalation, CloudTrail stop, S3 theft | CLOUD |
-| M365 BEC | AiTM phishing, session replay, inbox rule, payment change email | MAIL, CLOUD, BROW |
-| Active Directory attack lab | LLMNR poisoning, relay, DCSync, Golden Ticket | PCAP, EVTX, MEM |
-| APT espionage | Spearphish, DLL side loading, WMI persistence, slow DNS exfil | PCAP, EVTX, REG, MEM, DISK |
-| Supply chain | Trojanized update, beacon, lateral to servers | PCAP, EVTX, DISK |
-| Anti forensics case | Timestomp, log clear, SDelete, `$UsnJrnl` delete | MFT, EVTX, DISK |
-| Linux server intrusion | SSH brute force, sudo abuse, cron persistence, rootkit | LNX, PCAP, MEM, DISK |
-| Kubernetes compromise | Exposed API, privileged pod, host escape, miner | CLOUD, LNX, PCAP |
-| ICS intrusion | IT phishing, pivot to OT, Modbus writes | PCAP, EVTX |
-| Wireless intrusion | Deauth, handshake capture, evil twin, internal scan | PCAP |
-
-For every sample include: scenario story, ground truth timeline, ATT&CK IDs, SHA256 hashes, and tools and lab setup.
-
