@@ -149,11 +149,11 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| PowerShell encoded command | EVTX, MEM | 4104 script block, 4688 with -enc |
-| PowerShell download cradle (IEX, DownloadString) | EVTX, PCAP | Net.WebClient, Invoke-WebRequest |
+| PowerShell encoded command | [EVTX](samples/windows-event-logs/powershell-encoded-command), MEM | 4104 script block, 4688 with -enc |
+| PowerShell download cradle (IEX, DownloadString) | [EVTX](samples/windows-event-logs/powershell-download-cradle), PCAP | Net.WebClient, Invoke-WebRequest |
 | PowerShell without powershell.exe (Unmanaged) | EVTX, MEM | System.Management.Automation.dll in odd process |
 | PowerShell v2 downgrade | EVTX | EngineVersion 2.0 in 400 event |
-| AMSI bypass | EVTX, MEM | amsiInitFailed, patched AmsiScanBuffer |
+| AMSI bypass | [EVTX](samples/windows-event-logs/powershell-amsi-bypass), MEM | amsiInitFailed, patched AmsiScanBuffer |
 | cmd.exe batch scripts | EVTX, EXEC, MFT | .bat in temp, cmd parent chain |
 | WScript and CScript (VBS, JS) | EVTX, EXEC | wscript.exe with script in user path |
 | mshta HTA execution | EVTX, EXEC, PCAP | mshta with URL argument |
@@ -171,7 +171,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Native API and direct syscalls | MEM | Unbacked memory calling syscalls |
 | Shared modules (LoadLibrary of payload) | MEM, EVTX | Sysmon 7 unsigned DLL load |
 | User execution of malicious file | EXEC, MFT, EVTX | Explorer parent, Downloads path |
-| Office macro (VBA) | FILE, EVTX | Office child process, VBA in file |
+| Office macro (VBA) | FILE, [EVTX](samples/windows-event-logs/office-spawns-powershell) | Office child process, VBA in file |
 | Excel 4.0 (XLM) macros | FILE, EVTX | Hidden macro sheets |
 | DDE in Office | FILE, EVTX | DDEAUTO field |
 | Template injection (remote .dotm) | FILE, PCAP | settings.xml.rels to remote URL |
@@ -193,7 +193,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Startup folder | MFT, DISK, EXEC, EVTX | New file in Startup path |
 | Scheduled task | EVTX, DISK, REG | 4698, TaskCache tree keys |
 | Hidden scheduled task (SD deleted) | REG, DISK | Task with no SD value |
-| New service | EVTX, REG | 7045, 4697 |
+| New service | [EVTX](samples/windows-event-logs/malicious-service-install), REG | 7045, 4697 |
 | Modified existing service ImagePath | [REG](samples/registry/service-imagepath-modified), EVTX | Changed path on known service |
 | Service DLL hijack (svchost ServiceDll) | [REG](samples/registry/service-dll-hijack), EVTX | Parameters ServiceDll changed |
 | WMI event subscription | EVTX, MEM, DISK | WMI 5861, OBJECTS.DATA entries |
@@ -293,7 +293,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Clear Windows event logs | EVTX | 1102, 104 |
 | Delete single log records (EventCleaner, DanderSpritz) | EVTX, MEM | Gaps in record IDs |
 | Stop EventLog service thread (Phant0m) | EVTX, MEM | Silence with service still running |
-| Disable Defender (registry, Set-MpPreference) | REG, EVTX | 5001, 5007, DisableAntiSpyware |
+| Disable Defender (registry, Set-MpPreference) | REG, [EVTX](samples/windows-event-logs/powershell-disable-defender) | 5001, 5007, DisableAntiSpyware |
 | Defender exclusion added | REG, EVTX | Exclusions Paths key, 5007 |
 | Tamper or kill EDR (BYOVD EDR killer) | EVTX, MEM | Driver load then EDR stop |
 | Disable Sysmon or unload driver | EVTX | Sysmon 4 state change, fltmc unload |
@@ -308,7 +308,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Prefetch disabled or deleted | [REG](samples/registry/prefetch-disabled), MFT | EnablePrefetcher 0 |
 | Hidden files and attributes | MFT | Hidden, system flags, attrib +h +s |
 | Alternate data streams | MFT, FILE | Payload in named stream |
-| Masquerading (svch0st, wrong path) | EXEC, EVTX | Known name in odd folder |
+| Masquerading (svch0st, wrong path) | EXEC, [EVTX](samples/windows-event-logs/masquerading-svchost-user-path) | Known name in odd folder |
 | Right to left override filename | MFT, MAIL | U+202E in name |
 | Double extension | MAIL, MFT | invoice.pdf.exe |
 | Renamed system utilities | EVTX, EXEC | OriginalFileName mismatch |
@@ -344,7 +344,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| LSASS dump with Mimikatz | EVTX, MEM | Sysmon 10 GrantedAccess 0x1010 |
+| LSASS dump with Mimikatz | [EVTX](samples/windows-event-logs/powershell-invoke-mimikatz), MEM | Sysmon 10 GrantedAccess 0x1010 |
 | LSASS dump with procdump or comsvcs MiniDump | EVTX, MFT | rundll32 comsvcs MiniDump, .dmp file |
 | LSASS dump with Task Manager | EVTX, MFT | lsass.DMP in temp |
 | Nanodump and silent process exit dump | [REG](samples/registry/silent-process-exit-monitor), EVTX | SilentProcessExit LocalDumpFolder |
@@ -400,7 +400,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Domain trust enum (nltest) | EVTX | nltest /domain\_trusts |
 | BloodHound and SharpHound collection | EVTX, PCAP, MFT | Huge LDAP query burst, zip output file |
 | AdFind | EVTX, EXEC | adfind.exe with filters |
-| PowerView | EVTX | 4104 with Get-Domain cmdlets |
+| PowerView | [EVTX](samples/windows-event-logs/powershell-domain-recon-powerview) | 4104 with Get-Domain cmdlets |
 | LDAP recon queries | PCAP, EVTX | 1644 expensive queries |
 | Network share enum (net view, SharpShares) | EVTX, PCAP | 5140 across many hosts |
 | Internal port scan | PCAP, EVTX | One host hitting many internal IPs |
@@ -427,7 +427,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| PsExec (Sysinternals) | EVTX, REG, PCAP, EXEC | 7045 PSEXESVC, ADMIN$ write, 4624 type 3 |
+| PsExec (Sysinternals) | [EVTX](samples/windows-event-logs/psexec-service), REG, PCAP, EXEC | 7045 PSEXESVC, ADMIN$ write, 4624 type 3 |
 | Impacket psexec, smbexec, atexec | EVTX, PCAP | Random service names, output to ADMIN$ |
 | Impacket wmiexec | EVTX, PCAP | WmiPrvSE cmd with output to ADMIN$ |
 | Impacket dcomexec | EVTX, PCAP | MMC20 DCOM spawning cmd |
@@ -488,7 +488,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Cobalt Strike default profile | [PCAP](samples/network/cobalt-strike-like-profile), MEM | Known URIs, beacon config in memory |
 | Sliver, Havoc, Mythic, Brute Ratel | PCAP, MEM | Framework specific URIs and certs |
 | Metasploit Meterpreter | PCAP, MEM | Port 4444, reflective DLL in memory |
-| Empire and PowerShell C2 | PCAP, EVTX | Base64 cookies, 4104 stagers |
+| Empire and PowerShell C2 | PCAP, [EVTX](samples/windows-event-logs/powershell-reverse-shell) | Base64 cookies, 4104 stagers |
 | DNS C2 and tunneling (dnscat2, iodine) | PCAP | Long random subdomains, TXT records |
 | DNS over HTTPS C2 | [PCAP](samples/network/dns-over-https-c2) | Traffic to DoH resolvers from odd process |
 | ICMP tunneling | [PCAP](samples/network/icmp-tunnel) | Large or patterned ICMP payloads |
@@ -738,7 +738,7 @@ For real malware, do not run it yourself. Use public captures and memory images 
 | Bootkit (BlackLotus, TDL4) | DISK | Modified boot files |
 | Post exploitation framework (Cobalt Strike, Sliver, Metasploit) | PCAP, MEM, EVTX | Beacon config, named pipes |
 | Webshell families (China Chopper, ASPXSpy, P.A.S.) | WEB, MFT | Small script in web root |
-| Fileless PowerShell malware | EVTX, MEM, REG | Payload stored in registry or WMI |
+| Fileless PowerShell malware | [EVTX](samples/windows-event-logs/powershell-reflective-load), MEM, REG | Payload stored in registry or WMI |
 | Macro malware documents | FILE | VBA streams, OLE objects |
 | PDF malware | FILE | JavaScript and OpenAction in PDF |
 | Android malware (APK) | FILE, PCAP | Overlay permissions, SMS read |
