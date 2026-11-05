@@ -27,6 +27,14 @@ all day   Beacon repeats roughly every 60s (+/- 18s), about 459 check ins
 5. Why is it hard to see?        Normal user agent, CDN like name, hides among web traffic
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x c4d6dbbf195a3c3ce505c7cab37a232e90f7941d53a8a77d64b3b3828441dc72.zip -phidden`. You get `http-beacon-jitter.pcap`.
+2. Open `http-beacon-jitter.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r http-beacon-jitter.pcap -Y "http || tls"`, and list talkers with `tshark -r http-beacon-jitter.pcap -q -z conv,ip`.
+5. Confirm against the answer: Many connections to one host at a near regular interval, the jitter hides the exact period
+
 ## MITRE ATT&CK
 T1071.001 Application Layer Protocol: Web Protocols  
 T1573 Encrypted Channel  

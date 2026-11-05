@@ -24,6 +24,13 @@ An attacker posts a comment containing a script payload (stored XSS). Later, eve
 5. Payload location?  The stored comment body
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 44529f1312462a3e99d7511e725dfdb29c3e32a67c4efc7ec61e92ca5fd8e194.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A POST that stores user content, carrying a script payload
+
 ## MITRE ATT&CK
 - T1059.007 JavaScript
 

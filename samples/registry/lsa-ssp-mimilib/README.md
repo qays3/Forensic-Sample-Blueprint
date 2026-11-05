@@ -29,6 +29,13 @@ The LSA Security Packages multi string now includes mimilib alongside the normal
 5. Technique?          Malicious SSP
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x e81ba1a54442903422524e3a83561e7611fb231405ed933399d46bc7deaa1acb.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: An unexpected name in LSA Security Packages
+
 ## MITRE ATT&CK
 
 - T1547.005 Security Support Provider

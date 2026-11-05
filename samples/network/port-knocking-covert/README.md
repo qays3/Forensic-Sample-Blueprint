@@ -28,6 +28,14 @@ Capture date: 2020-02-13
 5. Purpose?            Hidden service access
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 000c091be802021a160147aa51fc8b16fba895cae9b94f8c3f0e9f60c1f9cbcf.zip -phidden`. You get `port-knocking-covert.pcap`.
+2. Open `port-knocking-covert.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r port-knocking-covert.pcap -Y "http || tls"`, and list talkers with `tshark -r port-knocking-covert.pcap -q -z conv,ip`.
+5. Confirm against the answer: SYNs to a fixed sequence of closed ports
+
 ## MITRE ATT&CK
 
 - T1205.001 Port Knocking

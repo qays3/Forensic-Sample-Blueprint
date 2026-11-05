@@ -24,6 +24,14 @@ A host (10.10.1.55) uploads stolen data to an external server (185.220.101.45, u
 5. Direction skew?   Large outbound, tiny responses
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 9773e00ca68d6e1e967bb8c41d418368f578aa39b86cfc5a7f15727467934661.zip -phidden`. You get `http-post-exfil.pcap`.
+2. Open `http-post-exfil.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r http-post-exfil.pcap -Y "http || tls"`, and list talkers with `tshark -r http-post-exfil.pcap -q -z conv,ip`.
+5. Confirm against the answer: Repeated large HTTP POST bodies to one external host
+
 ## MITRE ATT&CK
 - T1041 Exfiltration Over C2 Channel
 - T1048 Exfiltration Over Alternative Protocol

@@ -24,6 +24,14 @@ An attacker (10.10.1.66) floods the DHCP server with discover packets using thou
 5. Often paired with?  Rogue DHCP
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 56ef353f26fbcef8f01cb1a3f29fd282fe18e44201152eba2af2cfc8226601f9.zip -phidden`. You get `dhcp-starvation.pcap`.
+2. Open `dhcp-starvation.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r dhcp-starvation.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r dhcp-starvation.pcap -q -z conv,ip`.
+5. Confirm against the answer: A flood of DHCP discover packets in a short time
+
 ## MITRE ATT&CK
 - T1498 Network Denial of Service
 - T1557 Adversary in the Middle

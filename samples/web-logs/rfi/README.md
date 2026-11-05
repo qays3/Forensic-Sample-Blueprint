@@ -24,6 +24,13 @@ An attacker exploits remote file inclusion, pointing a page parameter at an exte
 5. Tell?              Param value is an http:// URL
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 22676b49c298ebde2dfc4d9a006b3f6f8af9cdfd9b51bd27dd1af76b478e967f.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A parameter value that is a full external URL
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

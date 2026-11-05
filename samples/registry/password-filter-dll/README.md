@@ -29,6 +29,13 @@ Notification Packages now lists an extra DLL name beside scecli.
 5. Technique?          Password filter DLL
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x cafc84c2a325da3193491590970a37e611a4419857b9b858d07e7893fe569a6a.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: An extra name in LSA Notification Packages
+
 ## MITRE ATT&CK
 
 - T1556.002 Password Filter DLL

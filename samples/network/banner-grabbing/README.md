@@ -28,6 +28,14 @@ Capture date: 2024-05-08
 5. Technique?          Banner grabbing
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 86d599e391aa9760b97acb3496ea681dbaac35a9fea09e4b205a17bd3dbe28de.zip -phidden`. You get `banner-grabbing.pcap`.
+2. Open `banner-grabbing.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r banner-grabbing.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r banner-grabbing.pcap -q -z conv,ip`.
+5. Confirm against the answer: Connect, read banner, immediate RST on each port
+
 ## MITRE ATT&CK
 
 - T1592.002 Software

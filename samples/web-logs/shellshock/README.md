@@ -24,6 +24,13 @@ An attacker sends a Shellshock payload in the User-Agent to a CGI endpoint, runn
 5. Command?           /bin/bash -c 'id'
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 9f6d78048752f4e29d3efb9545dfffc7c8fd2e1a43c5e2cba37d2167296616e0.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: () { :; }; function definition in the User-Agent
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

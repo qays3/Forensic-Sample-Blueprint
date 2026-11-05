@@ -29,6 +29,13 @@ EnablePrefetcher set to 0 under PrefetchParameters.
 5. Technique?          Impair defenses / indicator removal
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x f416eab5194d9e0c17d685b1594492a44c54a5976c540d6dbc845f7060a70e50.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: EnablePrefetcher set to 0 (normally 3)
+
 ## MITRE ATT&CK
 
 - T1562.001 Disable or Modify Tools

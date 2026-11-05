@@ -25,6 +25,14 @@ Attacker requests the MSSQLSvc/sql01.corp.local:1433 service ticket (TGS-REQ / T
 5. Discovery step?             LDAP SPN enumeration before the ticket request
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x fa6b54609ce75f0b8aa66a398aeac777ac470d2e9d8141c61c8af83d0ba21ebb.zip -phidden`. You get `kerberoasting-traffic.pcap`.
+2. Open `kerberoasting-traffic.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `kerberos`  (Kerberos AS-REQ/TGS-REQ and encryption types). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r kerberoasting-traffic.pcap -Y "kerberos"`, and list talkers with `tshark -r kerberoasting-traffic.pcap -q -z conv,ip`.
+5. Confirm against the answer: An LDAP query filtering for accounts that have a servicePrincipalName
+
 ## MITRE ATT&CK
 - T1558.003 Steal or Forge Kerberos Tickets: Kerberoasting
 

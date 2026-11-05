@@ -28,6 +28,14 @@ Capture date: 2021-06-10
 5. Technique?          Wireless recon
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 108e6786e10e139b8c62ab396f9cc03410d0a05dd62b85be017ec8e46ddf0db0.zip -phidden`. You get `wireless-recon.pcap`.
+2. Open `wireless-recon.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `wlan || eapol`  (802.11 management frames and EAPOL handshakes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wireless-recon.pcap -Y "wlan || eapol"`, and list talkers with `tshark -r wireless-recon.pcap -q -z conv,ip`.
+5. Confirm against the answer: 802.11 beacon frames advertising SSIDs and BSSIDs
+
 ## MITRE ATT&CK
 
 - T1595 Active Scanning

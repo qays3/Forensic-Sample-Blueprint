@@ -25,6 +25,14 @@ An attacker (10.10.1.66) calls the MS-EFSR (EfsRpcOpenFileRaw) method on the dom
 5. Technique name?      PetitPotam coercion
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 35bc4e4ada671117bc92b9dc628935715b1d3a0de5934c03465edd1ed586f4dc.zip -phidden`. You get `coerced-auth-petitpotam.pcap`.
+2. Open `coerced-auth-petitpotam.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r coerced-auth-petitpotam.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r coerced-auth-petitpotam.pcap -q -z conv,ip`.
+5. Confirm against the answer: An RPC call over SMB to the lsarpc or efsrpc pipe with a UNC path argument
+
 ## MITRE ATT&CK
 - T1187 Forced Authentication
 

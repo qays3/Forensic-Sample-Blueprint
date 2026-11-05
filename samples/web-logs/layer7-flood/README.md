@@ -24,6 +24,13 @@ An attacker floods an expensive search endpoint with hundreds of requests per se
 5. Source?            185.220.101.7
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 4277537f70ae8d1cb1b86cb038072b6b960e5577da3c09697d78dbc63f8b1bb5.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A very high request rate to one heavy endpoint
+
 ## MITRE ATT&CK
 - T1499.002 Endpoint Denial of Service: Service Exhaustion Flood
 

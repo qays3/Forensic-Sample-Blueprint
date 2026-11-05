@@ -24,6 +24,13 @@ later   Accepted password for lina
 5. Service?            SSH
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 59997325c21310529d06acab4057d36036e5c812ca95d18c581ea6eea6ab65b6.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: One failed attempt per user, many users
+
 ## MITRE ATT&CK
 - T1110.003 Brute Force: Password Spraying
 

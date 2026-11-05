@@ -25,6 +25,14 @@ An attacker host (10.10.1.66) sends Kerberos AS-REQ messages with no pre authent
 5. DC side event?       4768 with preauth type 0
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 28efcdfb38a08c68b355266a540c707156698e602722ad944f04fcb05472eaf1.zip -phidden`. You get `asrep-roasting-traffic.pcap`.
+2. Open `asrep-roasting-traffic.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `kerberos`  (Kerberos AS-REQ/TGS-REQ and encryption types). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r asrep-roasting-traffic.pcap -Y "kerberos"`, and list talkers with `tshark -r asrep-roasting-traffic.pcap -q -z conv,ip`.
+5. Confirm against the answer: AS-REQ messages carry no pre authentication timestamp
+
 ## MITRE ATT&CK
 - T1558.004 Steal or Forge Kerberos Tickets: AS-REP Roasting
 

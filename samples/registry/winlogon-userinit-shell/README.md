@@ -29,6 +29,13 @@ Userinit ends with an extra path after userinit.exe; Shell has an extra binary a
 5. Technique?          Winlogon helper persistence
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x a0d80d03b9e37091f5abdec69028a7208db95a4d44f93692deb517056421d7c9.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A second path appended to Userinit after userinit.exe
+
 ## MITRE ATT&CK
 
 - T1547.004 Winlogon Helper DLL

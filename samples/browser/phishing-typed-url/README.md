@@ -29,6 +29,14 @@ Activity date: 2019-09-10
 5. Technique?          Credential phishing
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 06dbebc98ab0fc69032bc0e4f8d5e733adb3fe7d1790be24ae848ed8bd8a4e7e.zip -phidden` (or your archive tool). You get `History`.
+2. Open the SQLite DB: `sqlite3 History`.
+3. Visits: `SELECT url,title,visit_count,datetime(last_visit_time/1000000-11644473600,'unixepoch') FROM urls ORDER BY last_visit_time DESC LIMIT 25;`.
+4. Downloads: `SELECT target_path,tab_url,referrer FROM downloads;`.
+5. Confirm against the answer: A typed_count of 1 on a lookalike login domain
+
 ## MITRE ATT&CK
 
 - T1566.002 Spearphishing Link

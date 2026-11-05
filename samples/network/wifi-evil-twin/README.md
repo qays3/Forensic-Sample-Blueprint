@@ -25,6 +25,14 @@ The rogue BSSID is the evil twin
 5. Risk?             Clients connect to attacker AP
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 1ba4f7768e255e48348bf307506756247959a42b83bfd7b4bce69acade1301a3.zip -phidden`. You get `wifi-evil-twin.pcap`.
+2. Open `wifi-evil-twin.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `wlan || eapol`  (802.11 management frames and EAPOL handshakes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wifi-evil-twin.pcap -Y "wlan || eapol"`, and list talkers with `tshark -r wifi-evil-twin.pcap -q -z conv,ip`.
+5. Confirm against the answer: Two BSSIDs (MACs) beaconing the same SSID
+
 ## MITRE ATT&CK
 - T1557 Adversary in the Middle
 

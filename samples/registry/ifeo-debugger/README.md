@@ -29,6 +29,13 @@ An IFEO subkey for sethc.exe with a Debugger value pointing at cmd.exe.
 5. Technique?          IFEO injection / accessibility abuse
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x cebada6ffdcde0b1b94fd71044487e758aceb5fd20f3db8cb34c628211294416.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A Debugger value under an IFEO subkey
+
 ## MITRE ATT&CK
 
 - T1546.008 Accessibility Features

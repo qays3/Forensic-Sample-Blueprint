@@ -24,6 +24,14 @@ The host 10.10.2.20 is hit with a UDP flood: thousands of large UDP packets from
 5. Category?         Denial of service
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x e120d630fb2c6be6d5399a1e5563533f1bc4a74cf7ee494aca39d1ab8bc605fe.zip -phidden`. You get `udp-flood.pcap`.
+2. Open `udp-flood.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `icmp.type==3`  (ICMP port-unreachable replies to UDP probes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r udp-flood.pcap -Y "icmp.type==3"`, and list talkers with `tshark -r udp-flood.pcap -q -z conv,ip`.
+5. Confirm against the answer: A very high rate of UDP packets to one host
+
 ## MITRE ATT&CK
 - T1498.001 Network Denial of Service: Direct Network Flood
 

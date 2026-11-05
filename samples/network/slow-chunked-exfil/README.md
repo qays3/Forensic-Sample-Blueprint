@@ -24,6 +24,14 @@ all day   A small POST every ~10 minutes, ~48 chunks
 5. Why slow?         Stay under volume alerts
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 1e2e890e0b8bdf322eff5408083af6bfaa492bc89178733ff88a8832d4376d59.zip -phidden`. You get `slow-chunked-exfil.pcap`.
+2. Open `slow-chunked-exfil.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r slow-chunked-exfil.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r slow-chunked-exfil.pcap -q -z conv,ip`.
+5. Confirm against the answer: Small, regular outbound posts spread over hours
+
 ## MITRE ATT&CK
 - T1030 Data Transfer Size Limits
 - T1041 Exfiltration Over C2 Channel

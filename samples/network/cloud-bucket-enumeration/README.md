@@ -28,6 +28,14 @@ Capture date: 2020-12-03
 5. Technique?          Cloud bucket enumeration
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 4efb2669946962e3919cfa15e566b49562461ef4fe07d4fd84d9efca6375ed1e.zip -phidden`. You get `cloud-bucket-enumeration.pcap`.
+2. Open `cloud-bucket-enumeration.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r cloud-bucket-enumeration.pcap -Y "http || tls"`, and list talkers with `tshark -r cloud-bucket-enumeration.pcap -q -z conv,ip`.
+5. Confirm against the answer: Many GET / to guessed bucket hostnames
+
 ## MITRE ATT&CK
 
 - T1580 Cloud Infrastructure Discovery

@@ -29,6 +29,13 @@ Session cookies (SID, ESTSAUTH, Okta sid, GitHub user_session, AWS) present with
 5. Technique?          Steal web session cookie
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x e52b5ff6f1231c881aae433e3bb0401af32042ef7f461d0d000a641ac188b9d7.zip -phidden` (or your archive tool). You get `Cookies`.
+2. Open the SQLite DB: `sqlite3 Cookies`.
+3. List the stored sessions: `SELECT host_key,name,is_secure,is_httponly FROM cookies;`.
+4. Confirm against the answer: Auth/session cookie names for SSO and cloud
+
 ## MITRE ATT&CK
 
 - T1539 Steal Web Session Cookie

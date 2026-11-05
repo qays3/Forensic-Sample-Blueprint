@@ -24,6 +24,13 @@ An attacker sends XML with an external entity (XXE) to an import endpoint to rea
 5. Where is payload?  Request body (app log)
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x afbd6146642a061fba229161bb68d761533cfbb83959063278c14ad285433b96.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: POST of XML to an import/parse endpoint
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

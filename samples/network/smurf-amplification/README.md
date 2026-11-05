@@ -28,6 +28,14 @@ Capture date: 2019-03-14
 5. Effect?             DoS by reply flood
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 60b9cdee5dc98402c1e2c0867ba0e530c0f10f759078822a21c5ee4492b37b8c.zip -phidden`. You get `smurf-amplification.pcap`.
+2. Open `smurf-amplification.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `icmp`  (ICMP echo traffic). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r smurf-amplification.pcap -Y "icmp"`, and list talkers with `tshark -r smurf-amplification.pcap -q -z conv,ip`.
+5. Confirm against the answer: ICMP echo requests sent to a broadcast address
+
 ## MITRE ATT&CK
 
 - T1498.001 Direct Network Flood

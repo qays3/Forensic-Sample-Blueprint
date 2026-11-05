@@ -28,6 +28,14 @@ Capture date: 2022-03-26
 5. Technique?          Ping of death
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 52d68196027841b8b87e20777576a44994f150d640d545ea95f8a5baf51c06b8.zip -phidden`. You get `ping-of-death-fragmentation.pcap`.
+2. Open `ping-of-death-fragmentation.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `icmp`  (ICMP echo traffic). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r ping-of-death-fragmentation.pcap -Y "icmp"`, and list talkers with `tshark -r ping-of-death-fragmentation.pcap -q -z conv,ip`.
+5. Confirm against the answer: Many fragments sharing one IP id
+
 ## MITRE ATT&CK
 
 - T1499.001 OS Exhaustion Flood

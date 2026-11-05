@@ -29,6 +29,14 @@ Activity date: 2019-05-14
 5. Technique?          Exfil to web service
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x b99c21c174b191eb36db7d7583331b5b853bec48df231be54da68cbfde9f8369.zip -phidden` (or your archive tool). You get `History`.
+2. Open the SQLite DB: `sqlite3 History`.
+3. Visits: `SELECT url,title,visit_count,datetime(last_visit_time/1000000-11644473600,'unixepoch') FROM urls ORDER BY last_visit_time DESC LIMIT 25;`.
+4. Downloads: `SELECT target_path,tab_url,referrer FROM downloads;`.
+5. Confirm against the answer: Visits to webhook.site / pastebin raw URLs
+
 ## MITRE ATT&CK
 
 - T1567.002 Exfiltration to Cloud Storage

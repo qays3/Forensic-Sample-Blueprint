@@ -24,6 +24,14 @@ all day   POSTs about every 45s, ~450 of them
 5. Why it evades DNS logs?  DNS is inside HTTPS on 443
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x a30afd294ee350a7d513c1755180a5439491ac7c7f505a71d5bc57230dd8e530.zip -phidden`. You get `dns-over-https-c2.pcap`.
+2. Open `dns-over-https-c2.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (DNS queries and answers). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r dns-over-https-c2.pcap -Y "dns"`, and list talkers with `tshark -r dns-over-https-c2.pcap -q -z conv,ip`.
+5. Confirm against the answer: POST requests to /dns-query with Content-Type application/dns-message
+
 ## MITRE ATT&CK
 - T1071.004 Application Layer Protocol: DNS
 - T1572 Protocol Tunneling

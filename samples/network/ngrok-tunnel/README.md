@@ -24,6 +24,14 @@ A host (10.10.1.88) opens an ngrok tunnel, connecting to an *.ngrok.io endpoint 
 5. Risk?             Exposes internal services or stable attacker tunnel
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x aacc00f77697a7ab876f0c93b6773a018fe0ca6becd0969835a679a473ff448e.zip -phidden`. You get `ngrok-tunnel.pcap`.
+2. Open `ngrok-tunnel.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r ngrok-tunnel.pcap -Y "http || tls"`, and list talkers with `tshark -r ngrok-tunnel.pcap -q -z conv,ip`.
+5. Confirm against the answer: DNS lookup and TLS SNI for an ngrok.io domain
+
 ## MITRE ATT&CK
 - T1572 Protocol Tunneling
 - T1090 Proxy

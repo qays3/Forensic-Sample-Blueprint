@@ -24,6 +24,14 @@ An attacker in the middle (10.10.1.66) downgrades the victim's HTTPS to HTTP (SS
 5. Prerequisite?     Man in the middle position
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 994c48b37befead2da69e5ebc630842e771ed7211d829aa8fa30dda03c959faf.zip -phidden`. You get `ssl-stripping.pcap`.
+2. Open `ssl-stripping.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `icmp`  (ICMP echo traffic). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r ssl-stripping.pcap -Y "icmp"`, and list talkers with `tshark -r ssl-stripping.pcap -q -z conv,ip`.
+5. Confirm against the answer: A site that should be HTTPS is served over plain HTTP
+
 ## MITRE ATT&CK
 - T1557 Adversary in the Middle
 - T1040 Network Sniffing

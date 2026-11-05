@@ -28,6 +28,14 @@ SMB and NTP traffic from other hosts.
 5. Is the handshake completed?        No, scanner sends RST after SYN ACK
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x f2918dccca93943d691897378d43a01f38fb050819a45bbd5fea00b89a26ae94.zip -phidden`. You get `tcp-syn-scan.pcap`.
+2. Open `tcp-syn-scan.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `tcp.flags.syn==1 && tcp.flags.ack==0`  (SYN probes across ports). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r tcp-syn-scan.pcap -Y "tcp.flags.syn==1 && tcp.flags.ack==0"`, and list talkers with `tshark -r tcp-syn-scan.pcap -q -z conv,ip`.
+5. Confirm against the answer: One source hits 1024 destination ports on one host in seconds
+
 ## MITRE ATT&CK
 T1595.001 Active Scanning: Scanning IP Blocks  
 T1046 Network Service Discovery  

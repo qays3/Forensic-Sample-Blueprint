@@ -26,6 +26,14 @@ later     One connection stays open and exchanges many packets, the compromise
 5. Service banner?              OpenSSH_8.9p1 Ubuntu
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 90480e2a7319973174e3cc1c1b589b3d156960189ce843f859788b328b280523.zip -phidden`. You get `ssh-brute-force.pcap`.
+2. Open `ssh-brute-force.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r ssh-brute-force.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r ssh-brute-force.pcap -q -z conv,ip`.
+5. Confirm against the answer: One external IP opens hundreds of connections to port 22
+
 ## MITRE ATT&CK
 T1110.001 Brute Force: Password Guessing  
 T1021.004 Remote Services: SSH  

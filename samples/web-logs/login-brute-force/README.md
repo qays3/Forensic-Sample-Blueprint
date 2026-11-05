@@ -24,6 +24,13 @@ An attacker brute forces the login form for one account, sending many failed POS
 5. Attacker?          45.137.22.90
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 6bad6d0213a8a74e02cd5d58d53cacd72de80cf2160790de5682859c42856dfa.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Many POSTs to /login with 401 from one IP
+
 ## MITRE ATT&CK
 - T1110.001 Brute Force: Password Guessing
 

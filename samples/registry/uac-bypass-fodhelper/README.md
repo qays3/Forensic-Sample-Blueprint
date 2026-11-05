@@ -29,6 +29,13 @@ A HKCU Classes ms-settings\shell\open\command with a payload and an empty Delega
 5. Technique?          UAC bypass (fodhelper)
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 0c11727088302c2609116368da0cdd4172b08d417f0abb12c6dfd2531bafd0b8.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A HKCU ms-settings open command override
+
 ## MITRE ATT&CK
 
 - T1548.002 Bypass UAC

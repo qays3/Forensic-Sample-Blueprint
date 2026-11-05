@@ -28,6 +28,14 @@ Capture date: 2024-04-22
 5. Technique?          DNS zone transfer
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 0b600adbd241f0397e46d92beb9c5ae35c0630085f2eaba2fdfde11608cc04c4.zip -phidden`. You get `dns-zone-transfer-axfr.pcap`.
+2. Open `dns-zone-transfer-axfr.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (DNS queries and answers). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r dns-zone-transfer-axfr.pcap -Y "dns"`, and list talkers with `tshark -r dns-zone-transfer-axfr.pcap -q -z conv,ip`.
+5. Confirm against the answer: An AXFR query over TCP 53 (not UDP)
+
 ## MITRE ATT&CK
 
 - T1590.002 DNS

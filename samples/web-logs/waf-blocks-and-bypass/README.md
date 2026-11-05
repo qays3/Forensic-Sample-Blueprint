@@ -24,6 +24,13 @@ An attacker probes the WAF: the first SQLi payloads are blocked (403), then an o
 5. Lesson?            A block is not immunity
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 135bf70c1eeb9139922cd1d7ab690de1f6aecd08a17c982b7176f889fb58d91a.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A run of 403s from the WAF on obvious payloads
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

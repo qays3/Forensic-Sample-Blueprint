@@ -28,6 +28,14 @@ Capture date: 2023-11-02
 5. Technique?          Active scanning (NSE)
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 78d489d6230f232bc5adf66ea2507a072732eba7832ff804e83286c3160ca57f.zip -phidden`. You get `nmap-nse-scan.pcap`.
+2. Open `nmap-nse-scan.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r nmap-nse-scan.pcap -Y "http || tls"`, and list talkers with `tshark -r nmap-nse-scan.pcap -q -z conv,ip`.
+5. Confirm against the answer: HTTP requests carrying an Nmap Scripting Engine user agent
+
 ## MITRE ATT&CK
 
 - T1595.002 Vulnerability Scanning

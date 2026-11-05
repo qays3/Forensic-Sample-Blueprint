@@ -28,6 +28,14 @@ Capture date: 2021-05-13
 5. Technique?          Cleartext protocol abuse
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 83add6f0ded2c1e4587f2b53bf70c2f94397dfc222d7f4a73bcb139736684492.zip -phidden`. You get `telnet-ftp-cleartext.pcap`.
+2. Open `telnet-ftp-cleartext.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ftp || ftp-data || telnet`  (cleartext FTP/Telnet commands and credentials). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r telnet-ftp-cleartext.pcap -Y "ftp || ftp-data || telnet"`, and list talkers with `tshark -r telnet-ftp-cleartext.pcap -q -z conv,ip`.
+5. Confirm against the answer: USER and PASS visible in plaintext
+
 ## MITRE ATT&CK
 
 - T1040 Network Sniffing

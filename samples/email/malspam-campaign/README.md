@@ -23,6 +23,14 @@ Parcel delivery lure with a zipped payload, bulk sent
 5. Family style?        Emotet/Qakbot
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 36ca4112b87ab04124b675875a538fae689722c668b29125667e6da4abe31e2d.zip -phidden` (or your archive tool). You get `inbox-00-normal.eml`.
+2. Read the headers: `cat inbox-00-normal.eml`; check `Received`, `From`, `Reply-To` and `Authentication-Results` (SPF, DKIM, DMARC).
+3. List the parts and decode attachments: `python3 -c "import email; m=email.message_from_file(open('inbox-00-normal.eml')); [print(p.get_content_type(), p.get_filename()) for p in m.walk()]"`.
+4. Pull URLs: `grep -Eoi 'https?://[^\"> ]+' inbox-00-normal.eml`.
+5. Confirm against the answer: A delivery/shipping lure with a zip attachment
+
 ## MITRE ATT&CK
 - T1566.001 Phishing: Spearphishing Attachment
 

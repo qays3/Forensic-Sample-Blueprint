@@ -24,6 +24,14 @@ all day   GET requests about every 60s with a base64 SESSIONID cookie, ~461 chec
 5. User agent tell?  Old IE/Trident string
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x bdfdea4e42ab2a1da1b04997028e1e1039e47f7f1ad6d116a14574f464d5a5de.zip -phidden`. You get `cobalt-strike-like-profile.pcap`.
+2. Open `cobalt-strike-like-profile.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r cobalt-strike-like-profile.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r cobalt-strike-like-profile.pcap -q -z conv,ip`.
+5. Confirm against the answer: Regular interval GET requests to one host, the malleable profile
+
 ## MITRE ATT&CK
 - T1071.001 Application Layer Protocol: Web Protocols
 - T1071.004 not used

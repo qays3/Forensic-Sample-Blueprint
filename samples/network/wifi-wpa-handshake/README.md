@@ -25,6 +25,14 @@ The EAPOL four way handshake (M1 to M4) is captured
 5. Next step?        Offline crack of the passphrase
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x f82c4425eb9c4fb3c71efb15e1293f8e464e4212d96fe6269c623c5d95dbd741.zip -phidden`. You get `wifi-wpa-handshake.pcap`.
+2. Open `wifi-wpa-handshake.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `wlan || eapol`  (802.11 management frames and EAPOL handshakes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wifi-wpa-handshake.pcap -Y "wlan || eapol"`, and list talkers with `tshark -r wifi-wpa-handshake.pcap -q -z conv,ip`.
+5. Confirm against the answer: A deauth burst right before a reconnect
+
 ## MITRE ATT&CK
 - T1040 Network Sniffing
 - T1110.002 Brute Force: Password Cracking

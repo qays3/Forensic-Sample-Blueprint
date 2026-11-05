@@ -24,6 +24,14 @@ An attacker (10.10.1.66) sends rogue IPv6 Router Advertisements (mitm6 style). W
 5. What it hijacks?  IPv6 gateway and DNS
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 2280ef793b41a309346718ea988af28be683c57fb685df88502e9a6b677e074e.zip -phidden`. You get `ipv6-ra-mitm.pcap`.
+2. Open `ipv6-ra-mitm.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r ipv6-ra-mitm.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r ipv6-ra-mitm.pcap -q -z conv,ip`.
+5. Confirm against the answer: ICMPv6 Router Advertisements from an unexpected host
+
 ## MITRE ATT&CK
 - T1557 Adversary in the Middle
 

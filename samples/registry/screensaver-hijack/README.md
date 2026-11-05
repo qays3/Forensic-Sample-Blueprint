@@ -29,6 +29,13 @@ SCRNSAVE.EXE set to an AppData .scr with a short idle timeout.
 5. Technique?          Screensaver persistence
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x b07a278d2e1f3e7d5fa38fd301f405ee968861d2e5fc4991b78257bb6a55f8ad.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: SCRNSAVE.EXE pointing outside System32
+
 ## MITRE ATT&CK
 
 - T1546.002 Screensaver

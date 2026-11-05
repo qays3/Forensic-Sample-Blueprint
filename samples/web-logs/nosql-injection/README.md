@@ -24,6 +24,13 @@ An attacker sends NoSQL injection in a JSON login body to /api/v1/login, using o
 5. Note?              Payload is in the JSON body
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x a7e7f8f17df45673ea36448225d2d678d39a8e89a993f108bd4d46d2fcee11b6.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: POST to a login API with JSON operator payloads ($ne, $gt)
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

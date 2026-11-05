@@ -29,6 +29,13 @@ A USBSTOR Disk entry for a SanDisk device with its serial, and a Portable Device
 5. Technique?          USB exfil (device trace)
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 934f92aeb16733f4973fcf1093302d431de3ace447fe0f566b0481b4bb40559d.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A USBSTOR Disk subkey with vendor, product and serial
+
 ## MITRE ATT&CK
 
 - T1052.001 Exfiltration over USB

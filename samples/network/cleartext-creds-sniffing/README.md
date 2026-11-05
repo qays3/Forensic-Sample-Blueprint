@@ -26,6 +26,14 @@ Several services on the network still use plaintext protocols. An attacker on th
 5. Why no attacker IP?           The capture is passive sniffing
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 48c05d2c6400dd4e1120aaa7665e5df68334446646645897461eba099f0c2a59.zip -phidden`. You get `cleartext-creds-sniffing.pcap`.
+2. Open `cleartext-creds-sniffing.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ftp || ftp-data || telnet`  (cleartext FTP/Telnet commands and credentials). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r cleartext-creds-sniffing.pcap -Y "ftp || ftp-data || telnet"`, and list talkers with `tshark -r cleartext-creds-sniffing.pcap -q -z conv,ip`.
+5. Confirm against the answer: Protocols FTP, HTTP basic, POP3 and Telnet send credentials unencrypted
+
 ## MITRE ATT&CK
 - T1040 Network Sniffing
 - T1552.001 Unsecured Credentials: Credentials In Files

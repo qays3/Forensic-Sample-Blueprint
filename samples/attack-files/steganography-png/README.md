@@ -30,6 +30,13 @@ The image renders fine; bytes after IEND hold a hidden block an analyst finds by
 5. Technique?          Steganography
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 87d75c64adbe6e0a3ffbac4de182e90c7832f1b55eb67064ba6fd7071094a4c8.zip -phidden` (or your archive tool). You get `logo.png`.
+2. Look for data appended after the image: `binwalk logo.png`, or `xxd logo.png | tail -n 20`, or `tail -c 400 logo.png`.
+3. Carve or read the trailer after the PNG IEND chunk.
+4. Confirm against the answer: Data present after the PNG IEND chunk
+
 ## MITRE ATT&CK
 
 - T1027.003 Steganography

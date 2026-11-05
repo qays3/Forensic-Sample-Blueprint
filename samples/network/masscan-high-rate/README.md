@@ -17,6 +17,14 @@ packets per second from a fixed source port.
 4. Tell from nmap?    Much higher rate, fixed source port
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 88eaad19cb15a68df453d3d8b9f44908d0e492685edec60fa65b67c3e3806eb0.zip -phidden`. You get `masscan-high-rate.pcap`.
+2. Open `masscan-high-rate.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `tcp.flags.syn==1 && tcp.flags.ack==0`  (SYN probes across ports). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r masscan-high-rate.pcap -Y "tcp.flags.syn==1 && tcp.flags.ack==0"`, and list talkers with `tshark -r masscan-high-rate.pcap -q -z conv,ip`.
+5. Confirm against the answer: Extremely high packet rate from one host
+
 ## MITRE ATT&CK
 T1595.001 Active Scanning: Scanning IP Blocks  
 

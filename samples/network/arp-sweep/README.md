@@ -16,6 +16,14 @@
 4. Live hosts?      10
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 3deb6128c1e70889b916727b49fe693a487c4dea5108d891d74927cfd79b1aac.zip -phidden`. You get `arp-sweep.pcap`.
+2. Open `arp-sweep.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `arp`  (ARP requests and replies). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r arp-sweep.pcap -Y "arp"`, and list talkers with `tshark -r arp-sweep.pcap -q -z conv,ip`.
+5. Confirm against the answer: A burst of ARP who-has requests for every address on the subnet from one MAC
+
 ## MITRE ATT&CK
 T1018 Remote System Discovery  
 

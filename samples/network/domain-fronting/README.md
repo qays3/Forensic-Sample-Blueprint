@@ -24,6 +24,14 @@ all day   Repeats about every 90s, ~222 times
 5. Why it hides?     Traffic appears to go to the CDN
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 6df2c37cf98b5255cc6d08f5313315130a4ab38e74cc3ab80903ee6eab947fb9.zip -phidden`. You get `domain-fronting.pcap`.
+2. Open `domain-fronting.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r domain-fronting.pcap -Y "http || tls"`, and list talkers with `tshark -r domain-fronting.pcap -q -z conv,ip`.
+5. Confirm against the answer: The TLS SNI and the HTTP Host header do not match
+
 ## MITRE ATT&CK
 - T1090.004 Proxy: Domain Fronting
 - T1071.001 Web Protocols

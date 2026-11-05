@@ -24,6 +24,14 @@ A host (10.10.1.91) is infected with malware that uses a domain generation algor
 5. Tell?              Long random labels, many failed lookups
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 85d82384b265a69b7de9c940ad131cd54baf2c1e5cc6ad3130430690c22cedad.zip -phidden`. You get `dga-domains.pcap`.
+2. Open `dga-domains.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (DNS queries and answers). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r dga-domains.pcap -Y "dns"`, and list talkers with `tshark -r dga-domains.pcap -q -z conv,ip`.
+5. Confirm against the answer: A burst of DNS lookups for long, random, meaningless domains
+
 ## MITRE ATT&CK
 - T1568.002 Dynamic Resolution: Domain Generation Algorithms
 

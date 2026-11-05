@@ -24,6 +24,13 @@ An attacker requests exposed /.git and /.env files, which leak source code and s
 5. Cause?             Deploying the .git/.env
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 3e806dc7ef337674342ad8c204bc82c4e81324f86ffc7aa9c19da47728a5c405.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Requests for /.git/ internals and /.env
+
 ## MITRE ATT&CK
 - T1595 Active Scanning
 - T1552.001 Credentials In Files

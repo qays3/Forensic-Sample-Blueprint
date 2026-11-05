@@ -29,6 +29,14 @@ Activity date: 2025-01-24
 5. Technique?          Insider exfil via personal email
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 03cefba0c6da6b7ab74e45a4875dcb1e997ad2004563bc4482b5f33bf9bd28e7.zip -phidden` (or your archive tool). You get `History`.
+2. Open the SQLite DB: `sqlite3 History`.
+3. Visits: `SELECT url,title,visit_count,datetime(last_visit_time/1000000-11644473600,'unixepoch') FROM urls ORDER BY last_visit_time DESC LIMIT 25;`.
+4. Downloads: `SELECT target_path,tab_url,referrer FROM downloads;`.
+5. Confirm against the answer: A second Google profile (u/1) in history
+
 ## MITRE ATT&CK
 
 - T1567.002 Exfiltration to Cloud Storage

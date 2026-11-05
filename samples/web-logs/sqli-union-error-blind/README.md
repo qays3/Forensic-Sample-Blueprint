@@ -24,6 +24,13 @@ An attacker tests the id parameter on /products for SQL injection: error based (
 5. Error sign?        HTTP 500 on the quote
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x c85aa4d8a4145df7f4d1817c188d5f80c01b22eed4546a9a20ff6bfcbe8b52a3.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Single quotes and SQL keywords in a parameter value
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

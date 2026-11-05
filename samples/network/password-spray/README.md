@@ -25,6 +25,14 @@ One account (dave) returns a TGT, the spray hit
 5. Which succeeded?      dave
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 2eeb423bbd4d861ba948a6ce41c3b6db87d8763676eb918a7f4dcf8f6255c465.zip -phidden`. You get `password-spray.pcap`.
+2. Open `password-spray.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r password-spray.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r password-spray.pcap -q -z conv,ip`.
+5. Confirm against the answer: One source sends AS-REQ pre-auth attempts for many usernames
+
 ## MITRE ATT&CK
 - T1110.003 Brute Force: Password Spraying
 

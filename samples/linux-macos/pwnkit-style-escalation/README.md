@@ -23,6 +23,13 @@ An attacker runs a PwnKit (CVE-2021-4034) style local exploit against pkexec to 
 5. Host?               appsrv02
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 4e95225ee80f9021826eede6a04ea0b0d8b6f938fef9a69c615eb12b1d3f9029.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: pkexec segfaults or odd GCONV_PATH use
+
 ## MITRE ATT&CK
 - T1068 Exploitation for Privilege Escalation
 

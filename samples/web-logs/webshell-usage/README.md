@@ -24,6 +24,13 @@ An attacker interacts with a planted webshell, sending commands via repeated POS
 5. Phase?             Webshell interaction
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x d34ee0a54ad5e625c9ccb3ea79083385684d94e1a70108d7631aefb86f6ab20b.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Repeated POSTs to one odd .php file
+
 ## MITRE ATT&CK
 - T1505.003 Web Shell
 - T1059 Command and Scripting Interpreter

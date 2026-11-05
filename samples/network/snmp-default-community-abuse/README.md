@@ -28,6 +28,14 @@ Capture date: 2023-10-01
 5. Technique?          Default community abuse
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 804b0b4ca2e5ae4b4250a66f9f3884e95e9f1f86a0c4a0bc06c3b85c9c9294ff.zip -phidden`. You get `snmp-default-community-abuse.pcap`.
+2. Open `snmp-default-community-abuse.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `snmp`  (SNMP get/getnext with the community string). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r snmp-default-community-abuse.pcap -Y "snmp"`, and list talkers with `tshark -r snmp-default-community-abuse.pcap -q -z conv,ip`.
+5. Confirm against the answer: SNMP with community public and private
+
 ## MITRE ATT&CK
 
 - T1078.001 Default Accounts

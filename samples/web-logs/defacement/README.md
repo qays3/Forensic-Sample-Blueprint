@@ -24,6 +24,13 @@ After compromising the server, the attacker overwrites the home page (defacement
 5. Phase?             Impact
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 1b0ef1d94863220437bc38267bf836feeb56711efb2e7d9956e58eac938dd5ab.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A webshell POST, then a write to index.html
+
 ## MITRE ATT&CK
 - T1491.001 Defacement: Internal Defacement
 

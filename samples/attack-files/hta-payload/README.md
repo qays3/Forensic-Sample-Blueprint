@@ -30,6 +30,13 @@ Opening via mshta would run the VBScript, launching hidden PowerShell to pull s.
 5. Technique?          HTA attachment
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 57b4608b1887cb8bec56187d0229e52bb341342da75f80ba67c70e013cc6568b.zip -phidden` (or your archive tool). You get `invoice.hta`.
+2. Open `invoice.hta` in a text editor (do not run it).
+3. Pull IOCs and decode: `grep -Eoi 'hxxp[^\"> ]+|https?://[^\"> ]+' invoice.hta`, then paste any base64 or char-code blobs into CyberChef to deobfuscate.
+4. Confirm against the answer: An .hta with VBScript and WScript.Shell
+
 ## MITRE ATT&CK
 
 - T1218.005 Mshta

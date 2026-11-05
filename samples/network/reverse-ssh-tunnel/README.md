@@ -24,6 +24,14 @@ A host (10.10.1.73) builds a reverse SSH tunnel to the attacker at 85.202.169.44
 5. Session type?     Long lived reverse tunnel
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x ef2f2314e9e45a72c93ae597ffce9a0f64d8cb01600c30dd3971d74cef9da9b5.zip -phidden`. You get `reverse-ssh-tunnel.pcap`.
+2. Open `reverse-ssh-tunnel.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (DNS queries and answers). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r reverse-ssh-tunnel.pcap -Y "dns"`, and list talkers with `tshark -r reverse-ssh-tunnel.pcap -q -z conv,ip`.
+5. Confirm against the answer: SSH protocol banner on port 443 instead of 22
+
 ## MITRE ATT&CK
 - T1572 Protocol Tunneling
 - T1021.004 Remote Services: SSH

@@ -28,6 +28,14 @@ Capture date: 2023-01-01
 5. Technique?          BGP prefix hijack
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 9e5f37e721406157112bb98bd90420c6f2928275bf99f1c4c0b68a8d8e4f5fa7.zip -phidden`. You get `bgp-hijack.pcap`.
+2. Open `bgp-hijack.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `bgp`  (BGP OPEN and UPDATE on tcp.port==179). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r bgp-hijack.pcap -Y "bgp"`, and list talkers with `tshark -r bgp-hijack.pcap -q -z conv,ip`.
+5. Confirm against the answer: BGP UPDATEs announcing prefixes not owned
+
 ## MITRE ATT&CK
 
 - T1557 Adversary-in-the-Middle

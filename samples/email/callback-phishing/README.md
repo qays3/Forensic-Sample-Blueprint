@@ -23,6 +23,14 @@ Fake renewal charge mail with only a phone number to call
 5. Next step?          Fake support installs RAT
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x ea6ec3b5f5549c346d7cbce8f04b65902cc8406caf88fcbb668ca1820f996489.zip -phidden` (or your archive tool). You get `inbox-00-normal.eml`.
+2. Read the headers: `cat inbox-00-normal.eml`; check `Received`, `From`, `Reply-To` and `Authentication-Results` (SPF, DKIM, DMARC).
+3. List the parts and decode attachments: `python3 -c "import email; m=email.message_from_file(open('inbox-00-normal.eml')); [print(p.get_content_type(), p.get_filename()) for p in m.walk()]"`.
+4. Pull URLs: `grep -Eoi 'https?://[^\"> ]+' inbox-00-normal.eml`.
+5. Confirm against the answer: No link or attachment, just a phone number
+
 ## MITRE ATT&CK
 - T1566 Phishing
 - T1598 Phishing for Information

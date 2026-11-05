@@ -23,6 +23,14 @@ Mail that looks like it is from the manager but is a random Gmail address
 5. Goal?               Start a BEC
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 2b174c931cc437f5a2871fe13b19cb82a21c634e3a34aa53b38587026fe47c2d.zip -phidden` (or your archive tool). You get `inbox-00-normal.eml`.
+2. Read the headers: `cat inbox-00-normal.eml`; check `Received`, `From`, `Reply-To` and `Authentication-Results` (SPF, DKIM, DMARC).
+3. List the parts and decode attachments: `python3 -c "import email; m=email.message_from_file(open('inbox-00-normal.eml')); [print(p.get_content_type(), p.get_filename()) for p in m.walk()]"`.
+4. Pull URLs: `grep -Eoi 'https?://[^\"> ]+' inbox-00-normal.eml`.
+5. Confirm against the answer: Display name is a known executive, address is a free mail account
+
 ## MITRE ATT&CK
 - T1534 Internal Spearphishing
 - T1656 Impersonation

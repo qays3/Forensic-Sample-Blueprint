@@ -24,6 +24,13 @@ An attacker sends requests with conflicting Content-Length and Transfer-Encoding
 5. Where?             Body of the POST
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 9a3d5c7debc1109b2f3e875b30081fdf12eeb05ac7cb511f0185196eb12cedd7.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Requests carrying both Content-Length and Transfer-Encoding
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

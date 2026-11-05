@@ -24,6 +24,13 @@ An attacker abuses a URL fetch feature (SSRF) to reach the cloud metadata servic
 5. Also probed?       localhost:8080/admin
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 934971af1a353c7c97df192d80c2fa1e2a4bb1970b56152ad0434e02923aa8a8.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A url parameter pointed at 169.254.169.254 or localhost
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 - T1552.005 Cloud Instance Metadata API

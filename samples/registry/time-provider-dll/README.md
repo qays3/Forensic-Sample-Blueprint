@@ -29,6 +29,13 @@ A new TimeProviders subkey with a DllName in ProgramData and Enabled set.
 5. Technique?          Time provider DLL
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 4c7f0538a398b4a5fd5cbda7141b1f5497e6de48b8cb5d1b46c970af5181d433.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A new TimeProviders subkey
+
 ## MITRE ATT&CK
 
 - T1547.003 Time Providers

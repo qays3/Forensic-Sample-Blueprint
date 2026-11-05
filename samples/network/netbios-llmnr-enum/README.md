@@ -28,6 +28,14 @@ Capture date: 2025-02-20
 5. Technique?          NetBIOS/LLMNR enum
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 1673385d2ad6c0ef28c5e8f72f737c0f435e70749cb7d7b1b5f533b1050d5c94.zip -phidden`. You get `netbios-llmnr-enum.pcap`.
+2. Open `netbios-llmnr-enum.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `nbns || llmnr`  (NBNS and LLMNR name queries). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r netbios-llmnr-enum.pcap -Y "nbns || llmnr"`, and list talkers with `tshark -r netbios-llmnr-enum.pcap -q -z conv,ip`.
+5. Confirm against the answer: NBNS queries to UDP 137 broadcast
+
 ## MITRE ATT&CK
 
 - T1590 Gather Victim Network Information

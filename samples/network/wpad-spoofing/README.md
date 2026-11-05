@@ -26,6 +26,14 @@ A workstation (10.10.1.58) looks for a WPAD proxy auto config file. The name wpa
 5. Impact?               Attacker sees and can change all web traffic
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 34f3658062d7b069a9084bd7e7766652efd2fd7c96a1eebb88f1f5d50723b610.zip -phidden`. You get `wpad-spoofing.pcap`.
+2. Open `wpad-spoofing.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `tcp.flags==0x029 || tcp.flags==0x000 || tcp.flags==0x001`  (odd TCP flag combinations). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wpad-spoofing.pcap -Y "tcp.flags==0x029 || tcp.flags==0x000 || tcp.flags==0x001"`, and list talkers with `tshark -r wpad-spoofing.pcap -q -z conv,ip`.
+5. Confirm against the answer: A wpad lookup falls back to LLMNR and one host answers
+
 ## MITRE ATT&CK
 - T1557.001 Adversary in the Middle: LLMNR/NBT-NS Poisoning
 - T1090 Proxy

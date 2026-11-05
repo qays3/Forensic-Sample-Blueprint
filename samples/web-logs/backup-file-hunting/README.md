@@ -24,6 +24,13 @@ An attacker hunts for leftover backup and source files (backup.zip, db.sql, .bak
 5. Attacker?          45.137.22.90
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 070bd222d143b3f5f17a6a5f99c3860b44962dfef375ebf0372096d97cd6cd4c.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Requests for .zip, .sql, .tar.gz, .bak, ~ files
+
 ## MITRE ATT&CK
 - T1595 Active Scanning
 

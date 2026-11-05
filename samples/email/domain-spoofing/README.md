@@ -23,6 +23,14 @@ Mail forged as it@corp.local but failing all authentication
 5. Tell?               Own domain but failing auth
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 6b213741ddfaaa9887e357a832864cfe001cd00e5c60715cd1a99d7fd83e7715.zip -phidden` (or your archive tool). You get `inbox-00-normal.eml`.
+2. Read the headers: `cat inbox-00-normal.eml`; check `Received`, `From`, `Reply-To` and `Authentication-Results` (SPF, DKIM, DMARC).
+3. List the parts and decode attachments: `python3 -c "import email; m=email.message_from_file(open('inbox-00-normal.eml')); [print(p.get_content_type(), p.get_filename()) for p in m.walk()]"`.
+4. Pull URLs: `grep -Eoi 'https?://[^\"> ]+' inbox-00-normal.eml`.
+5. Confirm against the answer: From is the real corp.local domain
+
 ## MITRE ATT&CK
 - T1566.002 Phishing: Spearphishing Link
 

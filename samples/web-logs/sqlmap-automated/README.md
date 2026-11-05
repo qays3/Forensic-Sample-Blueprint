@@ -24,6 +24,13 @@ The attacker runs sqlmap against /products. The log shows hundreds of automated 
 5. Status mix?        200 and 500
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x bd6bdf8f2be38764ca62398078cb055198d3e58e760a841994a04f50aa0b2133.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Hundreds of requests to one parameter in seconds
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

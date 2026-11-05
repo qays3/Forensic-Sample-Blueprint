@@ -28,6 +28,14 @@ Capture date: 2020-02-18
 5. Technique?          KRACK
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 934e69da77c41605eff7334ba9838ee624a3fe521075eda0d3525f9b68cb9b6c.zip -phidden`. You get `wifi-krack.pcap`.
+2. Open `wifi-krack.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `wlan || eapol`  (802.11 management frames and EAPOL handshakes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wifi-krack.pcap -Y "wlan || eapol"`, and list talkers with `tshark -r wifi-krack.pcap -q -z conv,ip`.
+5. Confirm against the answer: Repeated EAPOL message 3 of the 4-way handshake
+
 ## MITRE ATT&CK
 
 - T1557 Adversary-in-the-Middle

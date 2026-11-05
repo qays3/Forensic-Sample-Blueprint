@@ -24,6 +24,14 @@ Two internal hosts (10.10.1.50 and 10.10.1.51) talk over an SMB named pipe for p
 5. Protocol/port?    SMB over 445
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 9705d58b08326ff08fd6663e2b02639c77b088046084c762c4c8e91b66aa6cd2.zip -phidden`. You get `smb-named-pipe-c2.pcap`.
+2. Open `smb-named-pipe-c2.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `smb2 || ntlmssp || smb`  (SMB and NTLM traffic). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r smb-named-pipe-c2.pcap -Y "smb2 || ntlmssp || smb"`, and list talkers with `tshark -r smb-named-pipe-c2.pcap -q -z conv,ip`.
+5. Confirm against the answer: Internal host to host SMB with an odd named pipe (msagent_*)
+
 ## MITRE ATT&CK
 - T1071 Application Layer Protocol
 - T1090.001 Internal Proxy

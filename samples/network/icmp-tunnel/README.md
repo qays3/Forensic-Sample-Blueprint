@@ -24,6 +24,14 @@ A host (10.10.1.80) tunnels data to 91.219.236.17 inside ICMP echo packets. The 
 5. ICMP id used?     1337
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x da083b98f5ee962723dbf96b328df589ac0e19074a416a5460e4101339400755.zip -phidden`. You get `icmp-tunnel.pcap`.
+2. Open `icmp-tunnel.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `icmp`  (ICMP echo traffic). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r icmp-tunnel.pcap -Y "icmp"`, and list talkers with `tshark -r icmp-tunnel.pcap -q -z conv,ip`.
+5. Confirm against the answer: ICMP echo packets with large, non standard payloads
+
 ## MITRE ATT&CK
 - T1095 Non-Application Layer Protocol
 - T1048.003 Exfiltration Over Alternative Protocol

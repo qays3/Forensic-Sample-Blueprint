@@ -16,6 +16,14 @@
 4. Likely open?        53, 123, 161 (no reply)
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x c608c3f1088cecc7c7784534f8e076b0032bac56bd84fb8396fff244299780d7.zip -phidden`. You get `udp-scan.pcap`.
+2. Open `udp-scan.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `icmp.type==3`  (ICMP port-unreachable replies to UDP probes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r udp-scan.pcap -Y "icmp.type==3"`, and list talkers with `tshark -r udp-scan.pcap -q -z conv,ip`.
+5. Confirm against the answer: UDP probes to many ports from one host
+
 ## MITRE ATT&CK
 T1046 Network Service Discovery  
 

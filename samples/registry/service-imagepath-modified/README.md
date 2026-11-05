@@ -29,6 +29,13 @@ A service (Spooler) with an ImagePath changed to a ProgramData binary.
 5. Technique?          Service modification
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x b407130d05c2d8b2637d5fea691482b17b00829ec9c8e63bcbaf3b89731c6620.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A well known service with an ImagePath outside System32
+
 ## MITRE ATT&CK
 
 - T1543.003 Windows Service

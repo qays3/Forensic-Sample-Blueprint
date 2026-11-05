@@ -25,6 +25,14 @@ Client is repeatedly disconnected
 5. Purpose?          DoS or force reconnect for handshake capture
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x d5f0e0cad9217e59ecbbe8d9e1966a75cfed8777b2a353c32881611954b57c7f.zip -phidden`. You get `wifi-deauth.pcap`.
+2. Open `wifi-deauth.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `wlan || eapol`  (802.11 management frames and EAPOL handshakes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wifi-deauth.pcap -Y "wlan || eapol"`, and list talkers with `tshark -r wifi-deauth.pcap -q -z conv,ip`.
+5. Confirm against the answer: A flood of 802.11 deauthentication frames
+
 ## MITRE ATT&CK
 - T1498 Network Denial of Service
 

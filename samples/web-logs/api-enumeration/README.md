@@ -24,6 +24,13 @@ An attacker enumerates API endpoints, probing for hidden or unauthorized routes 
 5. Doc leak?          swagger.json
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 37976af022e3896d115409991757505c2b7ead1c52ae1d84f68d0e3360a0b0d5.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Rapid requests across many API paths
+
 ## MITRE ATT&CK
 - T1595 Active Scanning
 

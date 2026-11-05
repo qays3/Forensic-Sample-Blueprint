@@ -29,6 +29,13 @@ An Environment key value UserInitMprLogonScript pointing at an AppData batch fil
 5. Technique?          Logon script persistence
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 00953861877421901b2410fe69b875c3de0b083ccd6eea277fbe718b3c0595fc.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A UserInitMprLogonScript value under HKCU Environment
+
 ## MITRE ATT&CK
 
 - T1037.001 Logon Script (Windows)

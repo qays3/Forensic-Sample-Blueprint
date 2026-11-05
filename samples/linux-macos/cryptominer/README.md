@@ -23,6 +23,13 @@ An attacker drops and runs XMRig, which mines Monero to a pool and pins the CPU.
 5. Host?               dbsrv01
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 993a5ce3f7aa7d195c9671713f4ad9e9b7c2cbaf2b89b6fcc2603f2c86fb041b.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: A process named xmrig or similar miner
+
 ## MITRE ATT&CK
 - T1496 Resource Hijacking
 

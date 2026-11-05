@@ -28,6 +28,14 @@ Capture date: 2019-07-07
 5. Technique?          SMTP user enumeration
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 0484dc9154cfaca3124ae7490aad6a747a3a2e69f95de6fab9e53f7e7565f694.zip -phidden`. You get `smtp-user-enum.pcap`.
+2. Open `smtp-user-enum.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `smtp`  (SMTP commands (VRFY, MAIL, RCPT)). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r smtp-user-enum.pcap -Y "smtp"`, and list talkers with `tshark -r smtp-user-enum.pcap -q -z conv,ip`.
+5. Confirm against the answer: Repeated SMTP VRFY (or EXPN/RCPT) commands
+
 ## MITRE ATT&CK
 
 - T1087.003 Email Account

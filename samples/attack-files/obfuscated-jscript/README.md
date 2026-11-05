@@ -30,6 +30,13 @@ wscript runs the JS, which reassembles the URL, downloads a.exe and executes it.
 5. Technique?          Obfuscated script
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 3bd511c6ae237c0997dae476aa8b4ca31bf1ee548b8f7af12fdb9be33b59c57d.zip -phidden` (or your archive tool). You get `deobfuscated.js`.
+2. Open `deobfuscated.js` in a text editor (do not run it).
+3. Pull IOCs and decode: `grep -Eoi 'hxxp[^\"> ]+|https?://[^\"> ]+' deobfuscated.js`, then paste any base64 or char-code blobs into CyberChef to deobfuscate.
+4. Confirm against the answer: String splitting and array joins to hide a URL
+
 ## MITRE ATT&CK
 
 - T1027 Obfuscated Files or Information

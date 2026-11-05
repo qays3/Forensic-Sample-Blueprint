@@ -24,6 +24,13 @@ An external host (45.137.22.90) runs a directory and file brute force against in
 5. Tool sign?          High rate, curl UA
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 55dba141b469dca76fd4a7ec1b84e4e6d8b08758e8ce9b1d11f38b1c906b1ff6.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A burst of requests from one IP in seconds
+
 ## MITRE ATT&CK
 - T1595.003 Active Scanning: Wordlist Scanning
 

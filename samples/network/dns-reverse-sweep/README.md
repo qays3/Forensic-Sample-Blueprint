@@ -28,6 +28,14 @@ Capture date: 2019-06-05
 5. Technique?          Reverse lookup sweep
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x b145b7c83d4d9bb9cef7423f01ddc5ef27bf08004697dfb813b9d4f90489e242.zip -phidden`. You get `dns-reverse-sweep.pcap`.
+2. Open `dns-reverse-sweep.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (DNS queries and answers). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r dns-reverse-sweep.pcap -Y "dns"`, and list talkers with `tshark -r dns-reverse-sweep.pcap -q -z conv,ip`.
+5. Confirm against the answer: Many PTR queries walking an in-addr.arpa range
+
 ## MITRE ATT&CK
 
 - T1590 Gather Victim Network Information

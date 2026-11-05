@@ -24,6 +24,13 @@ An attacker runs GraphQL introspection and query batching against /graphql to ma
 5. Risk?              Full schema and data exposure
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 2a095047a74649660ac3e7be32ab41e74b677493f932ac0be6ecb202ea513e36.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: POSTs to /graphql with large responses
+
 ## MITRE ATT&CK
 - T1595 Active Scanning
 

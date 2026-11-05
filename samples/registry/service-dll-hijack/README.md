@@ -29,6 +29,13 @@ A service running under svchost with a ServiceDll pointing at ProgramData.
 5. Technique?          Service DLL hijack
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x cb9a5031d48521bd0ca421ca73f0ce8854c236ef6f4090991459617458e75ea4.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: A Parameters\ServiceDll outside System32
+
 ## MITRE ATT&CK
 
 - T1543.003 Windows Service

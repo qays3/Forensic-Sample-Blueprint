@@ -23,6 +23,13 @@ An attacker vacuums the systemd journal to destroy historical logs.
 5. Host?               appsrv02
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 3a1dc8b214c88198822acea94a1a93a146a43c109d1883e6760be2074e8939e7.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: journalctl --vacuum-time or --vacuum-size
+
 ## MITRE ATT&CK
 - T1070.002 Indicator Removal: Clear Linux or Mac System Logs
 

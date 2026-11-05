@@ -23,6 +23,13 @@ An attacker reads cloud credential files (.aws/credentials) to pivot into the cl
 5. Host?               appsrv02
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x d79ffbcb6ee7631c52d8fbf11b9f20cc283d96192fc428bb487fcbbafd70cdbf.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: Reads of ~/.aws/credentials or gcloud configs
+
 ## MITRE ATT&CK
 - T1552.001 Unsecured Credentials: Credentials In Files
 

@@ -24,6 +24,14 @@ all day   Polls about every 50s, ~413 of them
 5. Why it hides?     Trusted service destination
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 2c3ec541fc4c7dee9fe163f97f38e31d4911977c3d43ebfb66fbc18bf288f938.zip -phidden`. You get `c2-over-telegram.pcap`.
+2. Open `c2-over-telegram.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r c2-over-telegram.pcap -Y "http || tls"`, and list talkers with `tshark -r c2-over-telegram.pcap -q -z conv,ip`.
+5. Confirm against the answer: Requests to a legit API (Telegram) but from a non browser (python-requests)
+
 ## MITRE ATT&CK
 - T1102.002 Web Service: Bidirectional Communication
 - T1071.001 Web Protocols

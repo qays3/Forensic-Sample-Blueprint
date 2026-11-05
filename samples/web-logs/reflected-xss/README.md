@@ -24,6 +24,13 @@ An attacker tries reflected cross site scripting on the /search q parameter, inj
 5. Reflected where?   Search results page
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x a4ca168d2bc4c1189c25d10a64f0e1266076d5d76eaca647cbf6d9f50792d87c.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Script tags and event handlers in a query parameter
+
 ## MITRE ATT&CK
 - T1059.007 Command and Scripting Interpreter: JavaScript
 

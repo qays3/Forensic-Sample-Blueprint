@@ -25,6 +25,14 @@ later     One long session, the successful login
 5. Which try succeeded?  The long final session (administrator)
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 85314c67dcb1a42c775a5c88ae93e212cec6d69909b9d55c51cec90aef71d3f1.zip -phidden`. You get `rdp-brute-force.pcap`.
+2. Open `rdp-brute-force.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r rdp-brute-force.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r rdp-brute-force.pcap -q -z conv,ip`.
+5. Confirm against the answer: One external IP opens many connections to port 3389
+
 ## MITRE ATT&CK
 - T1110.001 Brute Force: Password Guessing
 - T1021.001 Remote Services: Remote Desktop Protocol

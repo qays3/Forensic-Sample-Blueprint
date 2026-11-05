@@ -29,6 +29,13 @@ Winlogon AutoAdminLogon enabled with a cleartext DefaultPassword value.
 5. Technique?          Credentials in registry
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 90f3b05aeff77a6c6ba581a4c0781b95c84103ac93fc553b2cba136e175f2225.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: AutoAdminLogon set to 1
+
 ## MITRE ATT&CK
 
 - T1552.002 Credentials in Registry

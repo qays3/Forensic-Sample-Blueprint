@@ -23,6 +23,13 @@ A user with a narrow sudo right abuses find via GTFOBins to spawn a root shell, 
 5. Host?               appsrv02
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 78ee8d9a9ac5018d524a91d4fcaafafc3adecb5f55e124b7b663155f2b199840.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: A sudo command running find with -exec /bin/sh
+
 ## MITRE ATT&CK
 - T1548.003 Abuse Elevation Control Mechanism: Sudo and Sudo Caching
 

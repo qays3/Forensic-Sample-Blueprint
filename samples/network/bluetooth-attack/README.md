@@ -28,6 +28,14 @@ Capture date: 2019-02-16
 5. Technique?          Bluetooth attack
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 7a783bb30790b2c93a2e1aeadaf2744bf18c7404e9fa49f39e56840d90e62a8f.zip -phidden`. You get `bluetooth-attack.pcap`.
+2. Open `bluetooth-attack.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r bluetooth-attack.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r bluetooth-attack.pcap -q -z conv,ip`.
+5. Confirm against the answer: Bluetooth inquiry scan listing BD_ADDRs and names
+
 ## MITRE ATT&CK
 
 - T1011 Exfiltration Over Other Network Medium

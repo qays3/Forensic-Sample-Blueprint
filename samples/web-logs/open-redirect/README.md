@@ -24,6 +24,13 @@ An attacker abuses an open redirect, crafting links that bounce users from the t
 5. Abuse?             Trusted link to phishing
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 7671597e96dda149c0ada42bc24f6527b49b19987a443f6dba653fec94ec9f67.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: A redirect parameter pointing to an external domain
+
 ## MITRE ATT&CK
 - T1566.002 Phishing: Spearphishing Link
 

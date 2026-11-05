@@ -24,6 +24,13 @@ An attacker replays leaked username and password pairs against the login form (c
 5. Root cause?        Reused leaked passwords
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x de1b1a7e79d972df03824ef78d60449e1950f225dc350fb94595c2b6e801570d.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: Many logins, each a different username, one attempt each
+
 ## MITRE ATT&CK
 - T1110.004 Brute Force: Credential Stuffing
 

@@ -28,6 +28,14 @@ Capture date: 2025-06-21
 5. Technique?          First-hop redundancy hijack
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x c2e1be56d70b2a0235bc09b48c7ef592c384147c3784ed660ecfab7bf8849fe2.zip -phidden`. You get `hsrp-hijack.pcap`.
+2. Open `hsrp-hijack.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `hsrp`  (HSRP hellos on udp.port==1985). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r hsrp-hijack.pcap -Y "hsrp"`, and list talkers with `tshark -r hsrp-hijack.pcap -q -z conv,ip`.
+5. Confirm against the answer: HSRP hellos to 224.0.0.2 UDP 1985
+
 ## MITRE ATT&CK
 
 - T1557 Adversary-in-the-Middle

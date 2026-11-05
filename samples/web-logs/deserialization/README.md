@@ -24,6 +24,13 @@ An attacker sends a crafted serialized object to an endpoint that deserializes u
 5. Error sign?        500 during tuning
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x ccb47f505ed7914fbd7f04fbc885c36303ac2522bf63eeaa2988ca7e31beba65.zip -phidden` (or your archive tool). You get `access.log`.
+2. Find the busiest source: `awk '{print $1}' access.log | sort | uniq -c | sort -rn | head`.
+3. Pull the suspect requests and their status codes: `grep -Ei 'select|union|\.\./|<script|/admin|\.php|payload' access.log` (adjust to this attack), and `awk '{print $9}' access.log | sort | uniq -c`.
+4. Confirm against the answer: POST bodies carrying serialized objects (rO0, O:, base64 gadgets)
+
 ## MITRE ATT&CK
 - T1190 Exploit Public-Facing Application
 

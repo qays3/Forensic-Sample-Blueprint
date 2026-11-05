@@ -25,6 +25,14 @@ The AP sends EAPOL M1 containing the PMKID, captured for offline cracking
 5. Next step?        Offline crack
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 134fd742c45f7db8d65bc058297ed82a8043458a172232403b2e384af60ded8c.zip -phidden`. You get `wifi-pmkid-attack.pcap`.
+2. Open `wifi-pmkid-attack.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `wlan || eapol`  (802.11 management frames and EAPOL handshakes). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r wifi-pmkid-attack.pcap -Y "wlan || eapol"`, and list talkers with `tshark -r wifi-pmkid-attack.pcap -q -z conv,ip`.
+5. Confirm against the answer: A single EAPOL message carrying a PMKID
+
 ## MITRE ATT&CK
 - T1040 Network Sniffing
 - T1110.002 Brute Force: Password Cracking

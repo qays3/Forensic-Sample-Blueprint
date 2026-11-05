@@ -24,6 +24,14 @@ An attacker (10.10.1.66) floods the switch with frames from thousands of fake so
 5. Attacker goal?    Sniff other ports traffic
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x f7befe357cf7b14f739067d5072fd3f27e2aa96f2af6a1c1c76d51c578cf3343.zip -phidden`. You get `mac-flooding.pcap`.
+2. Open `mac-flooding.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `ip.addr==10.10.1.66`  (traffic to and from the attacker host). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r mac-flooding.pcap -Y "ip.addr==10.10.1.66"`, and list talkers with `tshark -r mac-flooding.pcap -q -z conv,ip`.
+5. Confirm against the answer: A flood of frames each with a different random source MAC
+
 ## MITRE ATT&CK
 - T1557.002 Adversary in the Middle
 - T1498 Network Denial of Service

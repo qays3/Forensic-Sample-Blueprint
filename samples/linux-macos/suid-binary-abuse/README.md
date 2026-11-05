@@ -23,6 +23,13 @@ An attacker enumerates SUID binaries and abuses one to escalate to root.
 5. Host?               appsrv02
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 0029533d2a7707b65b05eb47b6869b4c9fa517c13c1d581d6bdfa952621e073b.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: find -perm -4000 enumerating SUID files
+
 ## MITRE ATT&CK
 - T1548.001 Setuid and Setgid
 

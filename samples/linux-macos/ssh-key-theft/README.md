@@ -23,6 +23,13 @@ An attacker hunts for and steals SSH private keys to move to other hosts.
 5. Host?               jumphost
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 933e33116ac6fb9daf171e342a187f3e111c43293c23d5ddbe39a9556f6a2810.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: find for id_rsa across home directories
+
 ## MITRE ATT&CK
 - T1552.004 Unsecured Credentials: Private Keys
 

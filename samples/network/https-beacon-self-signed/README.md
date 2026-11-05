@@ -24,6 +24,14 @@ all day   Short TLS sessions about every 5 minutes, ~94 of them
 5. What identifies it encrypted?  JA3/JA4 TLS fingerprint, timing, size
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x d2af4a624ce9cf2e99de5947874b6880a8702c57117139d936f10ec0490bb1d6.zip -phidden`. You get `https-beacon-self-signed.pcap`.
+2. Open `https-beacon-self-signed.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r https-beacon-self-signed.pcap -Y "http || tls"`, and list talkers with `tshark -r https-beacon-self-signed.pcap -q -z conv,ip`.
+5. Confirm against the answer: Regular short TLS sessions to one host, same size each time
+
 ## MITRE ATT&CK
 - T1573.002 Encrypted Channel: Asymmetric Cryptography
 - T1071.001 Web Protocols

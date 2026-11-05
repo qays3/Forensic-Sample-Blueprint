@@ -30,6 +30,13 @@ Opening the HTML runs JS that rebuilds statement.iso client-side and offers it f
 5. ATT&CK?             T1027.006
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 3c92b53d927a693ccc273c7d976810e27c3742757284cdd071609b544fda6735.zip -phidden` (or your archive tool). You get `statement.html`.
+2. Open `statement.html` in a text editor (do not run it).
+3. Pull IOCs and decode: `grep -Eoi 'hxxp[^\"> ]+|https?://[^\"> ]+' statement.html`, then paste any base64 or char-code blobs into CyberChef to deobfuscate.
+4. Confirm against the answer: A large embedded base64 blob in an HTML file
+
 ## MITRE ATT&CK
 
 - T1027.006 HTML Smuggling

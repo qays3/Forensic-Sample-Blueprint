@@ -29,6 +29,13 @@ A big binary value under a Classes key (starts with MZ) and a Run value that rea
 5. Technique?          Fileless registry payload
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 93796cca88cd5f18c1ba3fb5340103f5dd275b20909f14dac186586e2b90ad69.zip -phidden` (or your archive tool). You get `registry.reg`.
+2. Read it as text: `cat registry.reg`, or import into a throwaway hive and open in Registry Explorer / RECmd.
+3. Jump to the key that matters: `grep -niA2 -E 'Run|AppInit|Userinit|Debugger|ServiceDll|Security Packages|AlwaysInstallElevated|DefaultPassword|USBSTOR' registry.reg` (narrow to this one).
+4. Confirm against the answer: An unusually large binary value starting with 4d,5a (MZ)
+
 ## MITRE ATT&CK
 
 - T1547.001 Registry Run Keys

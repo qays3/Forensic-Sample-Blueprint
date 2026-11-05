@@ -23,6 +23,13 @@ An attacker reads /etc/shadow and prepares it for offline password cracking.
 5. Host?               appsrv02
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 5b1cdcbeb5f9290cf4c070672f7a58161e15c85da99e426badb17f8d02103465.zip -phidden` (or your archive tool). You get `auth.log`.
+2. Read the log: `less auth.log`; for auditd use `ausearch -if auth.log`, for a journal export `journalctl --file=auth.log`.
+3. Grep the indicator: `grep -Ei 'failed|accepted|sudo|useradd|/tmp/|preload|cron|wget|curl' auth.log` (narrow to this attack).
+4. Confirm against the answer: A non root read of /etc/shadow
+
 ## MITRE ATT&CK
 - T1003.008 OS Credential Dumping: /etc/passwd and /etc/shadow
 

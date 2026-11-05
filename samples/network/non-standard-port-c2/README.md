@@ -24,6 +24,14 @@ all day   GET /update about every 2 minutes, ~170 times
 5. User agent?       curl
 ```
 
+## How to solve it
+
+1. Extract the evidence, password `hidden`: `7z x 4332e4ac4a3bba886ea70a02f0e8b67d292963c43d7c4c610108a0ce3043ec4a.zip -phidden`. You get `non-standard-port-c2.pcap`.
+2. Open `non-standard-port-c2.pcap` in Wireshark.
+3. In Wireshark, paste this into the display filter bar and press Enter: `http || tls`  (HTTP/TLS requests, hosts and user agents). Then Statistics > Conversations to see the talkers.
+4. Same filter from the shell with tshark: `tshark -r non-standard-port-c2.pcap -Y "http || tls"`, and list talkers with `tshark -r non-standard-port-c2.pcap -q -z conv,ip`.
+5. Confirm against the answer: HTTP in cleartext on a port that normally means HTTPS (8443)
+
 ## MITRE ATT&CK
 - T1571 Non-Standard Port
 - T1071.001 Web Protocols
