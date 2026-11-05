@@ -157,11 +157,11 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | cmd.exe batch scripts | EVTX, EXEC, MFT | .bat in temp, cmd parent chain |
 | WScript and CScript (VBS, JS) | EVTX, EXEC | wscript.exe with script in user path |
 | mshta HTA execution | EVTX, EXEC, PCAP | mshta with URL argument |
-| rundll32 abuse | EVTX, EXEC | rundll32 with DLL in temp or JS |
+| rundll32 abuse | [EVTX](samples/windows-event-logs/sysmon-rundll32-dll-load), EXEC | rundll32 with DLL in temp or JS |
 | regsvr32 Squiblydoo | EVTX, PCAP | regsvr32 /i:http scrobj.dll |
 | msiexec remote install | EVTX, PCAP | msiexec /q /i http |
 | InstallUtil, MSBuild, RegAsm, RegSvcs | EVTX, EXEC | .NET signed binary running user code |
-| certutil download and decode | EVTX, MFT | certutil -urlcache -f, -decode |
+| certutil download and decode | [EVTX](samples/windows-event-logs/sysmon-certutil-download), MFT | certutil -urlcache -f, -decode |
 | certreq LOLBin upload | EVTX | certreq -post sends a file to an external server |
 | bitsadmin download | EVTX | BITS Client 59, 60 events |
 | WMIC process call create | EVTX, PCAP | WmiPrvSE spawning cmd |
@@ -505,7 +505,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Non standard port | [PCAP](samples/network/non-standard-port-c2) | HTTP over 8443, 53 non DNS |
 | Protocol impersonation | PCAP | Fake TLS or HTTP |
 | Fast flux and DGA domains | [PCAP](samples/network/dga-domains) | Many random domain lookups, NXDOMAIN |
-| Ingress tool transfer | PCAP, MFT, EVTX | Download then new file and execution |
+| Ingress tool transfer | PCAP, MFT, [EVTX](samples/windows-event-logs/sysmon-powershell-external-c2) | Download then new file and execution |
 | Remote access software as C2 | PCAP, EVTX | AnyDesk, ScreenConnect sessions |
 | WebSocket C2 | [PCAP](samples/network/websocket-c2) | Upgrade headers to odd host |
 | Covert channel in headers or cookies | PCAP | Encoded data in cookies |
