@@ -4,18 +4,22 @@
 
 A library of attack samples for DFIR practice. Each sample is a real artifact made in an isolated lab: network captures, event logs, NTFS files, registry hives, memory images, disk images, cloud logs and more. Every sample comes with an answer key so you can check your findings.
 
-Use it to practice investigations, test detection rules, train analysts, or build CTF challenges.
+Use it to practice investigations, test detection rules, train analysts, or build lab exercises.
 
 ## How Samples Are Made
 
-Samples are built three ways: hand written logs from scripts, crafted packets, and captures from real tools in a lab (for example a live Active Directory domain controller driven with impacket, nmap and tcpdump). Because of this mix, most samples are realistic, but a few are only representative and may feel weak or thin next to a real incident. Each sample README says how it was made, so you know what you are looking at.
+Most samples are one artifact per attack: a packet capture, a log file, a registry export, an email, a browser database. They are built from scripts, crafted packets, and captures from real tools in a lab (for example a live Active Directory domain controller driven with impacket, nmap and tcpdump).
+
+Memory, disk image and NTFS work differently. Each is a single real image taken from a lab machine where many attack cases were run, so one memory sample, one disk sample and one NTFS sample each hold many cases at once. Their answer key lists every case with the exact command to surface it (for example the Volatility plugin, the Sleuth Kit command, or the MFTECmd filter).
+
+Each sample README says how it was made, so you know what you are looking at.
 
 ## What Each Sample Includes
 
 Each sample folder holds:
 
 * `<sha256>.zip`: the zip filename is the SHA256 of the sample, password protected with `hidden`, and holds only the evidence files.
-* `README.md`: the scenario story, ground truth timeline, questions with answers, MITRE ATT&CK technique IDs and tools. Kept outside the zip so you can read it here.
+* `README.md`: the scenario story, ground truth timeline, questions with answers, MITRE ATT&CK technique IDs and tools. Kept outside the zip so you can read it here. For the single image samples (memory, disk image, NTFS) the answer key is organized case by case, each case with the command that surfaces it.
 
 ## Safety
 
