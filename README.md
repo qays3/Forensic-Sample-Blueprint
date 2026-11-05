@@ -63,24 +63,24 @@ Every attack below lists the sample types that capture it, using these codes. Se
 | ARP sweep | [PCAP](samples/network/arp-sweep) | ARP requests across subnet |
 | Service and version detection | [PCAP](samples/network/service-version-detection) | Nmap probes, banner grabs |
 | OS fingerprinting | [PCAP](samples/network/os-fingerprinting) | Odd TTL, window size, options |
-| Nmap NSE script scans | PCAP, WEB | NSE user agent, script payloads |
+| Nmap NSE script scans | [PCAP](samples/network/nmap-nse-scan), WEB | NSE user agent, script payloads |
 | Masscan high rate scan | [PCAP](samples/network/masscan-high-rate) | Very high packet rate, fixed source port |
 | Vulnerability scan (Nessus, OpenVAS, Nuclei) | [PCAP](samples/network/vulnerability-scan), [WEB](samples/web-logs/web-vulnerability-scanner) | Thousands of probe URLs, scanner user agents |
 | Web directory brute force (Gobuster, ffuf, Dirb) | [WEB](samples/web-logs/directory-brute-force), PCAP | Burst of 404s from one IP |
 | Web crawling and spidering | WEB | Fast sequential page hits |
-| Subdomain brute force | PCAP | Many NXDOMAIN DNS answers |
-| DNS zone transfer (AXFR) | PCAP | AXFR query over TCP 53 |
-| DNS reverse lookup sweep | PCAP | Many PTR queries |
-| SNMP walk | PCAP | SNMP GetNext with community strings |
-| SMB share and null session enum | PCAP, EVTX | IPC$ access, 5140, 4624 anonymous |
-| LDAP anonymous enum | PCAP | LDAP search with no bind |
-| SMTP user enum (VRFY, EXPN, RCPT) | PCAP | Repeated VRFY commands |
-| NetBIOS and LLMNR enum | PCAP | NBNS and LLMNR queries |
-| Banner grabbing (FTP, SSH, Telnet) | PCAP | Short connects, no auth |
+| Subdomain brute force | [PCAP](samples/network/subdomain-brute-force) | Many NXDOMAIN DNS answers |
+| DNS zone transfer (AXFR) | [PCAP](samples/network/dns-zone-transfer-axfr) | AXFR query over TCP 53 |
+| DNS reverse lookup sweep | [PCAP](samples/network/dns-reverse-sweep) | Many PTR queries |
+| SNMP walk | [PCAP](samples/network/snmp-walk) | SNMP GetNext with community strings |
+| SMB share and null session enum | [PCAP](samples/network/smb-null-session-enum), EVTX | IPC$ access, 5140, 4624 anonymous |
+| LDAP anonymous enum | [PCAP](samples/network/ldap-anonymous-enum) | LDAP search with no bind |
+| SMTP user enum (VRFY, EXPN, RCPT) | [PCAP](samples/network/smtp-user-enum) | Repeated VRFY commands |
+| NetBIOS and LLMNR enum | [PCAP](samples/network/netbios-llmnr-enum) | NBNS and LLMNR queries |
+| Banner grabbing (FTP, SSH, Telnet) | [PCAP](samples/network/banner-grabbing) | Short connects, no auth |
 | WAF fingerprinting (wafw00f) | WEB | Attack strings to trigger blocks |
-| Wireless recon (beacon and probe capture) | PCAP | 802.11 management frames |
+| Wireless recon (beacon and probe capture) | [PCAP](samples/network/wireless-recon) | 802.11 management frames |
 | OSINT and phishing recon | BROW | Searches for staff, LinkedIn, email formats |
-| Cloud bucket enumeration | CLOUD, PCAP | Many GET to bucket names, 404 and 403 |
+| Cloud bucket enumeration | CLOUD, [PCAP](samples/network/cloud-bucket-enumeration) | Many GET to bucket names, 404 and 403 |
 | Email address validation via O365 | CLOUD | Sign in probes, user not found errors |
 
 ### Resource Development
@@ -103,19 +103,19 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | Spearphishing attachment (macro document) | MAIL, FILE, EVTX, EXEC | WINWORD spawning cmd or PowerShell |
-| Spearphishing link (credential harvest) | MAIL, BROW, PCAP, CLOUD | Click, fake login page, then new sign in |
-| HTML smuggling | MAIL, FILE, BROW, MFT | HTML attachment drops ZIP or ISO in Downloads |
+| Spearphishing link (credential harvest) | MAIL, [BROW](samples/browser/phishing-typed-url), PCAP, CLOUD | Click, fake login page, then new sign in |
+| HTML smuggling | MAIL, [FILE](samples/attack-files/html-smuggling), BROW, MFT | HTML attachment drops ZIP or ISO in Downloads |
 | ISO, IMG, VHD container delivery | FILE, EVTX, MFT, REG | Mounted drive letter, LNK inside, no MOTW |
 | Malicious LNK delivery | FILE, EXEC, EVTX | LNK target with hidden PowerShell |
 | OneNote attachment payload | FILE, EVTX | ONENOTE spawning script host |
 | Password protected ZIP with payload | MAIL, FILE | Password in email body |
-| CHM, HTA, JS, VBS, WSF attachments | FILE, EVTX, EXEC | mshta, wscript, cscript execution |
+| CHM, HTA, JS, VBS, WSF attachments | [FILE](samples/attack-files/hta-payload), EVTX, EXEC | mshta, wscript, cscript execution |
 | QR code phishing | MAIL, BROW | Image with URL, mobile sign in |
 | Phishing over Teams or Slack | CLOUD, BROW | External chat message with link |
 | Callback phishing (fake support) | EVTX, PCAP | Remote tool installed after call |
-| Drive by download | BROW, PCAP, MFT | Exploit kit landing page, dropped file |
+| Drive by download | [BROW](samples/browser/malicious-download-history), PCAP, MFT | Exploit kit landing page, dropped file |
 | Watering hole | BROW, PCAP | Injected script on trusted site |
-| SEO poisoning fake installer | BROW, FILE, EXEC | Fake software site, signed loader |
+| SEO poisoning fake installer | [BROW](samples/browser/malicious-download-history), FILE, EXEC | Fake software site, signed loader |
 | Malvertising | BROW, PCAP | Ad redirect chain to payload |
 | Exploit public facing web app | WEB, PCAP, LNX, EVTX | Exploit request then webshell or shell |
 | Exploit VPN or firewall appliance (Fortinet, Pulse, Citrix) | PCAP, WEB | Path traversal or RCE strings to appliance |
@@ -158,6 +158,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | msiexec remote install | EVTX, PCAP | msiexec /q /i http |
 | InstallUtil, MSBuild, RegAsm, RegSvcs | EVTX, EXEC | .NET signed binary running user code |
 | certutil download and decode | EVTX, MFT | certutil -urlcache -f, -decode |
+| certreq LOLBin upload | EVTX | certreq -post sends a file to an external server |
 | bitsadmin download | EVTX | BITS Client 59, 60 events |
 | WMIC process call create | EVTX, PCAP | WmiPrvSE spawning cmd |
 | WMIC XSL remote script | EVTX, PCAP | wmic /format:http |
@@ -184,28 +185,28 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| Run and RunOnce keys (HKCU, HKLM) | REG, EVTX | Sysmon 13 registry set |
-| Startup folder | MFT, DISK, EXEC | New file in Startup path |
+| Run and RunOnce keys (HKCU, HKLM) | [REG](samples/registry/run-key-persistence), EVTX | Sysmon 13 registry set |
+| Startup folder | MFT, DISK, EXEC, EVTX | New file in Startup path |
 | Scheduled task | EVTX, DISK, REG | 4698, TaskCache tree keys |
 | Hidden scheduled task (SD deleted) | REG, DISK | Task with no SD value |
 | New service | EVTX, REG | 7045, 4697 |
-| Modified existing service ImagePath | REG, EVTX | Changed path on known service |
-| Service DLL hijack (svchost ServiceDll) | REG, EVTX | Parameters ServiceDll changed |
+| Modified existing service ImagePath | [REG](samples/registry/service-imagepath-modified), EVTX | Changed path on known service |
+| Service DLL hijack (svchost ServiceDll) | [REG](samples/registry/service-dll-hijack), EVTX | Parameters ServiceDll changed |
 | WMI event subscription | EVTX, MEM, DISK | WMI 5861, OBJECTS.DATA entries |
-| Winlogon Userinit and Shell | REG | Extra value after userinit.exe |
-| Winlogon Notify and AppInit\_DLLs | REG | DLL path in AppInit |
-| Image File Execution Options debugger | REG | Debugger value on sethc or utilman |
+| Winlogon Userinit and Shell | [REG](samples/registry/winlogon-userinit-shell) | Extra value after userinit.exe |
+| Winlogon Notify and AppInit\_DLLs | [REG](samples/registry/appinit-dlls) | DLL path in AppInit |
+| Image File Execution Options debugger | [REG](samples/registry/ifeo-debugger), EVTX | Debugger value on sethc or utilman |
 | Sticky keys and Utilman backdoor | MFT, REG, EVTX | sethc.exe replaced by cmd.exe |
-| Silent Process Exit monitor | REG | MonitorProcess value |
-| COM hijacking | REG | HKCU CLSID InprocServer32 override |
+| Silent Process Exit monitor | [REG](samples/registry/silent-process-exit-monitor) | MonitorProcess value |
+| COM hijacking | [REG](samples/registry/com-hijack-inprocserver), EVTX | HKCU CLSID InprocServer32 override |
 | DLL search order hijack | MFT, EVTX | Sysmon 7 DLL from app folder |
 | DLL side loading | MFT, EVTX, EXEC | Signed EXE plus malicious DLL in temp |
 | Phantom DLL hijack | MFT, EVTX | Missing DLL placed by attacker |
-| Accessibility features abuse | REG, MFT | osk, magnify, narrator replaced |
+| Accessibility features abuse | [REG](samples/registry/accessibility-utilman-debugger), MFT | osk, magnify, narrator replaced |
 | Office startup (Normal.dotm, XLSTART, add ins) | MFT, REG | Modified template or new add in |
-| Office test registry key | REG | Office test Special Perf key |
+| Office test registry key | [REG](samples/registry/office-test-key) | Office test Special Perf key |
 | Outlook rules, forms, home page | REG, CLOUD | Outlook rule launching app |
-| Browser extension | BROW, REG | Force installed extension |
+| Browser extension | [BROW](samples/browser/malicious-extension), REG | Force installed extension |
 | Local account creation | EVTX, REG | 4720, 4732 |
 | Domain account creation | EVTX | 4720 on DC, added to groups |
 | Hidden account ($ name) | EVTX, REG | Username ending with $ |
@@ -213,16 +214,16 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | SID History injection | EVTX | 4765, 4766 |
 | Golden Ticket | EVTX, PCAP, MEM | TGS with no matching TGT, odd lifetime |
 | Skeleton key | MEM, EVTX | Patched LSASS on DC |
-| Malicious SSP (mimilib) | REG, MFT | Security Packages value changed |
-| Password filter DLL | REG, MFT | Notification Packages changed |
-| Netsh helper DLL | REG | Netsh key new DLL |
-| Port monitor and print processor | REG, MFT | Monitors key DLL in System32 |
-| Time provider DLL | REG | W32Time TimeProviders change |
-| LSA authentication package | REG | Authentication Packages change |
+| Malicious SSP (mimilib) | [REG](samples/registry/lsa-ssp-mimilib), MFT | Security Packages value changed |
+| Password filter DLL | [REG](samples/registry/password-filter-dll), MFT | Notification Packages changed |
+| Netsh helper DLL | [REG](samples/registry/netsh-helper-dll) | Netsh key new DLL |
+| Port monitor and print processor | [REG](samples/registry/port-monitor-dll), MFT | Monitors key DLL in System32 |
+| Time provider DLL | [REG](samples/registry/time-provider-dll) | W32Time TimeProviders change |
+| LSA authentication package | [REG](samples/registry/lsa-auth-package) | Authentication Packages change |
 | BITS job persistence | EVTX, DISK | BITS 3, 59 events, qmgr database |
-| Screensaver hijack | REG | SCRNSAVE.EXE path |
+| Screensaver hijack | [REG](samples/registry/screensaver-hijack) | SCRNSAVE.EXE path |
 | Application shimming (SDB) | REG, MFT | Custom sdb installed |
-| Boot or logon script (UserInitMprLogonScript) | REG | Environment key value |
+| Boot or logon script (UserInitMprLogonScript) | [REG](samples/registry/userinit-logon-script) | Environment key value |
 | GPO logon script or scheduled task | EVTX, DISK | SYSVOL changes, 5136 |
 | Webshell | WEB, MFT, DISK | New aspx, php, jsp in web root |
 | IIS module backdoor | DISK, EVTX | New native module in applicationHost.config |
@@ -247,8 +248,8 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | UAC bypass fodhelper | REG, EVTX | ms-settings shell open command key |
-| UAC bypass eventvwr | REG, EVTX | mscfile shell open command |
-| UAC bypass sdclt, computerdefaults, CMSTP | REG, EVTX | Auto elevate binary spawning cmd |
+| UAC bypass eventvwr | [REG](samples/registry/uac-bypass-eventvwr), EVTX | mscfile shell open command |
+| UAC bypass sdclt, computerdefaults, CMSTP | [REG](samples/registry/uac-bypass-fodhelper), EVTX | Auto elevate binary spawning cmd |
 | Token impersonation (Potato family) | EVTX, MEM | Service account spawning SYSTEM shell |
 | PrintSpoofer and named pipe impersonation | EVTX, MEM | Spooler pipe abuse |
 | SeDebugPrivilege abuse | EVTX, MEM | 4703 enable, handle to SYSTEM process |
@@ -256,7 +257,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Unquoted service path | REG, MFT, EVTX | Program.exe in C root |
 | Weak service permissions | EVTX, REG | sc config binPath change |
 | Weak folder permissions on service binary | MFT, EVTX | Service EXE replaced |
-| AlwaysInstallElevated | REG, EVTX | Both keys set, msiexec as SYSTEM |
+| AlwaysInstallElevated | [REG](samples/registry/always-install-elevated), EVTX | Both keys set, msiexec as SYSTEM |
 | Vulnerable driver (BYOVD) | EVTX, MFT, MEM | Sysmon 6 driver load, known bad hash |
 | Kernel exploit (local) | MEM, EVTX, DISK | Exploit binary, crash dumps |
 | PrintNightmare | EVTX, MFT | New driver in spool folder, 316 event |
@@ -293,14 +294,14 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Tamper or kill EDR (BYOVD EDR killer) | EVTX, MEM | Driver load then EDR stop |
 | Disable Sysmon or unload driver | EVTX | Sysmon 4 state change, fltmc unload |
 | Disable firewall | REG, EVTX | 2003, netsh advfirewall off |
-| Disable or clear PowerShell logging | REG, EVTX | ScriptBlockLogging set to 0 |
+| Disable or clear PowerShell logging | [REG](samples/registry/disable-powershell-logging-reg), EVTX | ScriptBlockLogging set to 0 |
 | ETW patching | MEM | Patched EtwEventWrite |
 | AMSI patching | MEM | Patched AmsiScanBuffer |
 | File deletion of tools | MFT, EXEC | `$UsnJrnl` delete records, Prefetch left |
 | Secure delete (SDelete, cipher /w) | MFT | Renamed to AAAA names before delete |
 | `$UsnJrnl` deletion | MFT, EVTX | fsutil usn deletejournal |
 | Volume shadow copy deletion | EVTX | vssadmin delete, wmic shadowcopy delete |
-| Prefetch disabled or deleted | REG, MFT | EnablePrefetcher 0 |
+| Prefetch disabled or deleted | [REG](samples/registry/prefetch-disabled), MFT | EnablePrefetcher 0 |
 | Hidden files and attributes | MFT | Hidden, system flags, attrib +h +s |
 | Alternate data streams | MFT, FILE | Payload in named stream |
 | Masquerading (svch0st, wrong path) | EXEC, EVTX | Known name in odd folder |
@@ -308,7 +309,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Double extension | MAIL, MFT | invoice.pdf.exe |
 | Renamed system utilities | EVTX, EXEC | OriginalFileName mismatch |
 | Mark of the Web bypass | MFT, FILE | Missing Zone.Identifier |
-| Obfuscated or encoded scripts | FILE, EVTX | Base64, char codes, string splits |
+| Obfuscated or encoded scripts | [FILE](samples/attack-files/obfuscated-jscript), EVTX | Base64, char codes, string splits |
 | Packed binaries (UPX, custom) | FILE, MEM | High entropy, few imports |
 | Process injection classic (VirtualAllocEx, CreateRemoteThread) | MEM, EVTX | Sysmon 8, RWX region |
 | Process hollowing | MEM | Image path mismatch, unmapped section |
@@ -331,8 +332,8 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Code signing abuse | FILE, EVTX | Signed malware |
 | Impair cloud logging | CLOUD | StopLogging, DeleteTrail, diagnostic setting delete |
 | Use of alternate auth material | EVTX, CLOUD | Token reuse with no password events |
-| Fileless registry stored payload | REG, MEM | Large binary value in registry |
-| Steganography in images | FILE, PCAP | Payload hidden in PNG |
+| Fileless registry stored payload | [REG](samples/registry/fileless-registry-payload), MEM | Large binary value in registry |
+| Steganography in images | [FILE](samples/attack-files/steganography-png), PCAP | Payload hidden in PNG |
 | Virtualization (run VM on victim) | DISK, EVTX | VirtualBox install, VM files |
 
 ### Credential Access
@@ -342,7 +343,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | LSASS dump with Mimikatz | EVTX, MEM | Sysmon 10 GrantedAccess 0x1010 |
 | LSASS dump with procdump or comsvcs MiniDump | EVTX, MFT | rundll32 comsvcs MiniDump, .dmp file |
 | LSASS dump with Task Manager | EVTX, MFT | lsass.DMP in temp |
-| Nanodump and silent process exit dump | REG, EVTX | SilentProcessExit LocalDumpFolder |
+| Nanodump and silent process exit dump | [REG](samples/registry/silent-process-exit-monitor), EVTX | SilentProcessExit LocalDumpFolder |
 | SAM and SYSTEM hive dump | EVTX, MFT | reg save HKLM\\SAM |
 | LSA secrets and cached creds dump | REG, MEM | SECURITY hive access |
 | NTDS.dit theft (ntdsutil IFM, vssadmin) | EVTX, MFT | ntdsutil, shadow copy create, 325 ESENT |
@@ -364,14 +365,14 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Silver Ticket | EVTX | Service logon with no 4769 |
 | Diamond and Sapphire tickets | EVTX, PCAP | Modified real TGT |
 | Browser saved passwords theft | BROW, EVTX, MFT | Access to Login Data and Local State |
-| Browser cookie theft | BROW, MFT | Cookies file copied |
+| Browser cookie theft | [BROW](samples/browser/session-cookie-theft), MFT | Cookies file copied |
 | DPAPI master key abuse | MFT, MEM | Protect folder access |
 | Credential Manager and vault dump | EVTX | 5379, vaultcmd |
 | Keylogging | MEM, FILE, MFT | SetWindowsHookEx, log file |
 | Clipboard theft | MEM | Clipboard API polling |
 | Fake credential prompt | EVTX, MEM | PowerShell Get-Credential popup |
 | Credentials in files and scripts | DISK | Passwords in ps1, config, xml |
-| Credentials in registry (Winlogon AutoLogon) | REG | DefaultPassword value |
+| Credentials in registry (Winlogon AutoLogon) | [REG](samples/registry/autologon-defaultpassword) | DefaultPassword value |
 | KeePass and password manager theft | MEM, MFT | KeePass process dump, kdbx copy |
 | WiFi password dump | EVTX | netsh wlan show profile key=clear |
 | Linux /etc/shadow theft | [LNX](samples/linux-macos/shadow-file-read) | Read of shadow, unshadow |
@@ -411,7 +412,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Peripheral device discovery | EVTX | WMI Win32\_PnPEntity |
 | System time discovery | EVTX | net time, w32tm |
 | Virtualization and sandbox check | MEM, FILE | VM artifact queries |
-| Browser bookmark and history discovery | BROW | Reads of bookmarks file |
+| Browser bookmark and history discovery | [BROW](samples/browser/bookmark-history-discovery) | Reads of bookmarks file |
 | Password policy and GPO discovery | EVTX, PCAP | SYSVOL reads |
 | Linux recon (id, uname, ps, ss, cat /etc/passwd) | [LNX](samples/linux-macos/linux-recon-commands) | Commands in history or auditd |
 | Cloud recon (enumerate IAM, buckets, VMs) | CLOUD | Burst of List and Describe calls |
@@ -470,7 +471,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Database dump | [LNX](samples/linux-macos/database-dump), EVTX, PCAP | mysqldump, sqlcmd export |
 | Code repository clone | CLOUD, PCAP | git clone of many repos |
 | Data from cloud storage (S3 sync) | CLOUD | GetObject burst |
-| Browser data collection | BROW, MFT | Copy of browser profile |
+| Browser data collection | [BROW](samples/browser/session-cookie-theft), MFT | Copy of browser profile |
 | Removable media data copy | REG, MFT, EXEC | USB serial, LNK pointing to E drive |
 | Automated collection scripts | EVTX | PowerShell Get-ChildItem by extension |
 
@@ -517,9 +518,9 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | DNS exfil | [PCAP](samples/network/dns-exfil) | Encoded data in queries |
 | ICMP exfil | [PCAP](samples/network/icmp-exfil) | Data in echo payloads |
 | Email exfil | MAIL, CLOUD | Attachments to personal address |
-| Exfil to webhook or paste site | [PCAP](samples/network/exfil-to-paste-site), BROW | Pastebin, webhook.site posts |
+| Exfil to webhook or paste site | [PCAP](samples/network/exfil-to-paste-site), [BROW](samples/browser/paste-site-exfil) | Pastebin, webhook.site posts |
 | Exfil to GitHub or code repo | PCAP | git push to new repo |
-| USB exfil | REG, MFT, EXEC, EVTX | USB serial, LNK to removable drive, 6416 |
+| USB exfil | [REG](samples/registry/usbstor-exfil-device), MFT, EXEC, EVTX | USB serial, LNK to removable drive, 6416 |
 | Bluetooth exfil | REG | Bluetooth device pairing keys |
 | Printing documents | EVTX, DISK | PrintService 307 |
 | Cloud storage share link | CLOUD | AnonymousLinkCreated |
@@ -528,7 +529,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Database export over network | PCAP | Big SQL result sets |
 | Scheduled or throttled exfil | [PCAP](samples/network/slow-chunked-exfil) | Small chunks at fixed times |
 | Exfil via steganography | PCAP, FILE | Images uploaded with hidden data |
-| Insider personal email upload | BROW, PCAP | Gmail upload of company files |
+| Insider personal email upload | [BROW](samples/browser/personal-email-upload), PCAP | Gmail upload of company files |
 
 ### Impact
 
@@ -596,65 +597,6 @@ Linux items already listed in earlier sections are not repeated here.
 | systemd timer persistence | [LNX](samples/linux-macos/systemd-timer-persistence) | A .timer unit runs a payload on a schedule |
 | Tar staging and scp exfil | [LNX](samples/linux-macos/tar-staging-and-scp-exfil) | Archive of a share then scp out, then cleanup |
 
-### Cloud and Identity Attacks
-
-All of these produce CLOUD samples. Extra sample types are noted where they help.
-
-| Platform | Attack | Key evidence |
-| --- | --- | --- |
-| AWS | Leaked access key used from new IP | GetCallerIdentity first, then recon |
-| AWS | IAM user or key creation for persistence | CreateUser, CreateAccessKey |
-| AWS | Privilege escalation via policy attach | AttachUserPolicy, PutUserPolicy |
-| AWS | PassRole to EC2 or Lambda | RunInstances or CreateFunction with admin role |
-| AWS | Assume role chain | AssumeRole across accounts |
-| AWS | CloudTrail disable or delete | StopLogging, DeleteTrail, PutEventSelectors |
-| AWS | GuardDuty disable | DeleteDetector |
-| AWS | S3 data theft | ListObjects then GetObject burst |
-| AWS | S3 ransomware (encrypt with attacker KMS) | CopyObject with new KMS key |
-| AWS | EBS snapshot share | ModifySnapshotAttribute to other account |
-| AWS | Security group opened to world | AuthorizeSecurityGroupIngress 0.0.0.0/0 |
-| AWS | EC2 IMDS credential theft via SSRF | Role creds used outside instance (plus WEB) |
-| AWS | SSM SendCommand for execution | SendCommand on many instances |
-| AWS | Lambda backdoor | UpdateFunctionCode |
-| AWS | Console login without MFA | ConsoleLogin MFAUsed No |
-| AWS | Cryptomining instances | RunInstances in unused regions |
-| Azure | Role assignment escalation | Microsoft.Authorization roleAssignments write |
-| Azure | VM Run Command | runCommand action |
-| Azure | Storage account key listing and SAS abuse | listKeys, SAS token use |
-| Azure | Key Vault secret theft | SecretGet burst |
-| Azure | Diagnostic settings delete | diagnosticSettings delete |
-| Azure | Managed identity token abuse | Token request from VM then API calls |
-| Entra ID | Password spray | 50126 errors across users |
-| Entra ID | MFA fatigue | Many MFA denied, then success |
-| Entra ID | AiTM session hijack | Same session ID from two IPs |
-| Entra ID | Impossible travel | Logins from far apart places in short time |
-| Entra ID | Device code phishing | Sign in with deviceCode protocol |
-| Entra ID | Illicit OAuth consent | Consent to application, mail scopes |
-| Entra ID | App registration secret add | Add service principal credentials |
-| Entra ID | Global admin added | Add member to role |
-| Entra ID | MFA method registration by attacker | User registered security info |
-| Entra ID | Conditional access policy change | Update conditional access policy |
-| Entra ID | Federation backdoor (Golden SAML) | Set domain authentication, ADFS token signing theft |
-| Entra ID | PRT theft and pass the PRT | Sign in from new device with PRT |
-| M365 | Malicious inbox rule | New-InboxRule, Set-InboxRule |
-| M365 | Mail forwarding to external | Set-Mailbox ForwardingSmtpAddress |
-| M365 | Mailbox access by attacker | MailItemsAccessed |
-| M365 | eDiscovery search abuse | New-ComplianceSearch, export |
-| M365 | SharePoint mass download | FileDownloaded burst |
-| M365 | Teams external phishing | Chat from external tenant |
-| M365 | Mailbox delegation added | Add-MailboxPermission FullAccess |
-| GCP | Service account key creation | CreateServiceAccountKey |
-| GCP | IAM policy change | SetIamPolicy |
-| GCP | Logging sink delete | DeleteSink |
-| Kubernetes | Anonymous API access | Requests from system:anonymous |
-| Kubernetes | Privileged pod creation | Pod with hostPID, hostPath / |
-| Kubernetes | Exec into pod | pods/exec |
-| Kubernetes | Secret read | get secrets burst |
-| Kubernetes | Malicious image deploy | New deployment with miner image |
-| Kubernetes | RBAC escalation | ClusterRoleBinding to cluster-admin |
-| SaaS | GitHub token abuse | Clone of private repos, new deploy key |
-| SaaS | Okta session hijack | Session reuse from new IP |
-
 ### Web Application Attacks
 
 All of these produce WEB and PCAP samples. Capture HTTP in clear text or decrypt TLS with a key log file so the payloads show in the pcap.
@@ -713,63 +655,64 @@ All of these produce PCAP samples. Add device logs (router, switch, firewall sys
 | DHCP spoofing (rogue DHCP) | [PCAP](samples/network/rogue-dhcp) | Two DHCP servers answering |
 | DHCP starvation | [PCAP](samples/network/dhcp-starvation) | Flood of DISCOVER with random MACs |
 | DNS spoofing and cache poisoning | [PCAP](samples/network/dns-spoofing) | Fake answers, mismatched TXID |
-| DNS hijack by changed resolver | PCAP | Clients using unknown DNS server |
+| DNS hijack by changed resolver | [PCAP](samples/network/dns-hijack-rogue-resolver) | Clients using unknown DNS server |
 | IPv6 RA spoofing and mitm6 | [PCAP](samples/network/ipv6-ra-mitm) | Rogue router advertisements, DHCPv6 replies |
 | MAC flooding | [PCAP](samples/network/mac-flooding) | CAM table overflow traffic |
 | VLAN hopping (double tagging, DTP) | [PCAP](samples/network/vlan-hopping) | Double 802.1Q tags, DTP frames |
 | STP manipulation | [PCAP](samples/network/stp-root-hijack) | BPDU claiming root bridge |
-| HSRP and VRRP hijack | PCAP | Higher priority hello from attacker |
-| BGP hijack | PCAP | Route announce changes (device logs) |
+| HSRP and VRRP hijack | [PCAP](samples/network/hsrp-hijack) | Higher priority hello from attacker |
+| BGP hijack | [PCAP](samples/network/bgp-hijack) | Route announce changes (device logs) |
 | SSL stripping | [PCAP](samples/network/ssl-stripping) | HTTPS downgraded to HTTP |
 | TLS downgrade and weak cipher | [PCAP](samples/network/tls-downgrade) | Old TLS versions negotiated |
 | SMB relay | [PCAP](samples/network/smb-relay) | SMB auth forwarded to other host |
 | SYN flood | [PCAP](samples/network/syn-flood) | Many half open connections |
 | UDP flood | [PCAP](samples/network/udp-flood) | High UDP rate to one target |
-| Ping of death and fragmentation attacks | PCAP | Overlapping or huge fragments |
-| Smurf and Fraggle | PCAP | ICMP or UDP to broadcast |
+| Ping of death and fragmentation attacks | [PCAP](samples/network/ping-of-death-fragmentation) | Overlapping or huge fragments |
+| Smurf and Fraggle | [PCAP](samples/network/smurf-amplification) | ICMP or UDP to broadcast |
 | NTP and DNS amplification | [PCAP](samples/network/dns-amplification) | Small queries, huge replies |
 | Teardrop and LAND attacks | [PCAP](samples/network/teardrop-fragmentation) | Bad fragment offsets, same src and dst |
-| Session hijacking TCP | PCAP | Injected packets with right sequence numbers |
-| Telnet and FTP cleartext abuse | PCAP | Plain text creds and commands |
-| SNMP default community abuse | PCAP | public or private strings, SET requests |
-| Modbus and DNP3 attacks (ICS) | PCAP | Write coil or register commands from new host |
-| S7comm PLC stop | PCAP | Stop CPU function codes |
-| VoIP SIP flood and toll fraud | PCAP | INVITE flood, odd call destinations |
+| Session hijacking TCP | [PCAP](samples/network/tcp-session-hijacking) | Injected packets with right sequence numbers |
+| Telnet and FTP cleartext abuse | [PCAP](samples/network/telnet-ftp-cleartext) | Plain text creds and commands |
+| SNMP default community abuse | [PCAP](samples/network/snmp-default-community-abuse) | public or private strings, SET requests |
+| Modbus and DNP3 attacks (ICS) | [PCAP](samples/network/modbus-dnp3-ics) | Write coil or register commands from new host |
+| S7comm PLC stop | [PCAP](samples/network/s7comm-plc-stop) | Stop CPU function codes |
+| VoIP SIP flood and toll fraud | [PCAP](samples/network/voip-sip-flood) | INVITE flood, odd call destinations |
 | WiFi deauth attack | [PCAP](samples/network/wifi-deauth) | Burst of deauth frames |
 | WiFi WPA handshake capture | [PCAP](samples/network/wifi-wpa-handshake) | EAPOL frames after deauth |
 | WiFi evil twin | [PCAP](samples/network/wifi-evil-twin) | Same SSID from new BSSID |
 | WiFi PMKID attack | [PCAP](samples/network/wifi-pmkid-attack) | EAPOL M1 requests to AP |
-| WiFi KRACK | PCAP | Replayed handshake messages |
-| Bluetooth attacks | PCAP | HCI logs with odd pairing |
-| Port knocking and covert channels | PCAP | Odd sequences before port opens |
-| Firewall evasion with fragmentation | PCAP | Tiny fragments hiding headers |
+| WiFi KRACK | [PCAP](samples/network/wifi-krack) | Replayed handshake messages |
+| Bluetooth attacks | [PCAP](samples/network/bluetooth-attack) | HCI logs with odd pairing |
+| Port knocking and covert channels | [PCAP](samples/network/port-knocking-covert) | Odd sequences before port opens |
+| Firewall evasion with fragmentation | [PCAP](samples/network/firewall-evasion-fragmentation) | Tiny fragments hiding headers |
 
 ### Email Attacks
 
 All of these produce MAIL samples (.eml, .msg). Add CLOUD message trace and BROW click history for the full picture.
 
-| Attack | Key evidence |
-| --- | --- |
-| Credential phishing link | Fake login URL, lookalike domain |
-| Malicious attachment (macro, ISO, LNK, HTML) | Attachment type and hash |
-| Display name spoofing | CEO name with free mail address |
-| Domain spoofing | SPF, DKIM, DMARC fail in headers |
-| Lookalike domain (typosquat, homoglyph) | rn for m, Cyrillic letters |
-| Reply chain hijack (thread hijacking) | Real thread, new sender IP, payload link |
-| BEC invoice and payment change | Bank details change request |
-| CEO fraud gift card scam | Urgent request, no links |
-| Vendor email compromise | Real vendor domain, new reply to |
-| QR code phishing | Image only body |
-| Callback phishing | Phone number, no link |
-| Open redirect in link | Trusted domain redirecting out |
-| URL shortener and cloud hosted phish | bit.ly, SharePoint, Google Forms links |
-| Encrypted or password protected attachment | Password in body |
-| Calendar invite phishing | .ics with malicious link |
-| Sextortion and extortion spam | Bitcoin address, threats |
-| Malware spam campaign (Emotet, Qakbot style) | Many recipients, zipped payload |
-| Header injection and reply to mismatch | Reply-To differs from From |
-| Internal phishing from compromised account | Internal sender, mass recipients |
-| Email bombing (subscription flood) | Thousands of signup confirmations |
+| Attack | Samples | Key evidence |
+| --- | --- | --- |
+| Credential phishing link | [MAIL](samples/email/credential-phishing-link) | Fake login URL, lookalike domain |
+| Malicious attachment (macro, ISO, LNK, HTML) | [MAIL](samples/email/malicious-attachment) | Attachment type and hash |
+| Display name spoofing | [MAIL](samples/email/display-name-spoofing) | CEO name with free mail address |
+| Domain spoofing | [MAIL](samples/email/domain-spoofing) | SPF, DKIM, DMARC fail in headers |
+| Lookalike domain (typosquat, homoglyph) | [MAIL](samples/email/lookalike-domain) | rn for m, Cyrillic letters |
+| Reply chain hijack (thread hijacking) | [MAIL](samples/email/reply-chain-hijack) | Real thread, new sender IP, payload link |
+| BEC invoice and payment change | [MAIL](samples/email/bec-invoice-payment-change) | Bank details change request |
+| CEO fraud gift card scam | [MAIL](samples/email/ceo-gift-card-fraud) | Urgent request, no links |
+| Vendor email compromise | [MAIL](samples/email/vendor-email-compromise) | Real vendor domain, new reply to |
+| QR code phishing | [MAIL](samples/email/qr-code-phishing) | Image only body |
+| Callback phishing | [MAIL](samples/email/callback-phishing) | Phone number, no link |
+| Open redirect in link | [MAIL](samples/email/open-redirect-link) | Trusted domain redirecting out |
+| URL shortener and cloud hosted phish | [MAIL](samples/email/cloud-hosted-phishing-link) | bit.ly, SharePoint, Google Forms links |
+| Encrypted or password protected attachment | [MAIL](samples/email/password-protected-attachment) | Password in body |
+| Calendar invite phishing | [MAIL](samples/email/calendar-invite-phishing) | .ics with malicious link |
+| Sextortion and extortion spam | [MAIL](samples/email/extortion-spam) | Bitcoin address, threats |
+| Malware spam campaign (Emotet, Qakbot style) | [MAIL](samples/email/malspam-campaign) | Many recipients, zipped payload |
+| Header injection and reply to mismatch | [MAIL](samples/email/reply-to-mismatch) | Reply-To differs from From |
+| Internal phishing from compromised account | [MAIL](samples/email/internal-phishing-from-compromised-account) | Internal sender, mass recipients |
+| Email bombing (subscription flood) | [MAIL](samples/email/email-bombing) | Thousands of signup confirmations |
+| HTML smuggling attachment | [MAIL](samples/email/html-smuggling-attachment) | .html attachment assembles the payload in the browser |
 
 ### Malware Family Samples
 
