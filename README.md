@@ -49,7 +49,6 @@ Every attack below lists the sample types that capture it, using these codes. Se
 | BROW | Browser artifacts | History, Cookies, Downloads, Login Data, cache, extensions |
 | LNX | Linux and macOS artifacts | auth.log, syslog, journal, auditd, .bash\_history, cron, wtmp, btmp, unified logs |
 | WEB | Web logs | Apache, Nginx, IIS, WAF, app logs |
-| CLOUD | Cloud and identity logs | CloudTrail, VPC Flow Logs, Azure Activity, Entra ID sign in and audit, M365 UAL, GCP audit, Kubernetes audit |
 | MAIL | Email | .eml, .msg, .pst, message trace, headers |
 | FILE | Attack file sample | Documents, scripts, PE files, ISO, LNK, defanged payloads |
 
@@ -84,8 +83,7 @@ Every attack below lists the sample types that capture it, using these codes. Se
 | WAF fingerprinting (wafw00f) | WEB | Attack strings to trigger blocks |
 | Wireless recon (beacon and probe capture) | [PCAP](samples/network/wireless-recon) | 802.11 management frames |
 | OSINT and phishing recon | BROW | Searches for staff, LinkedIn, email formats |
-| Cloud bucket enumeration | CLOUD, [PCAP](samples/network/cloud-bucket-enumeration) | Many GET to bucket names, 404 and 403 |
-| Email address validation via O365 | CLOUD | Sign in probes, user not found errors |
+| Cloud bucket enumeration | [PCAP](samples/network/cloud-bucket-enumeration) | Many GET to bucket names, 404 and 403 |
 
 ### Resource Development
 
@@ -107,7 +105,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | Spearphishing attachment (macro document) | MAIL, FILE, EVTX, EXEC | WINWORD spawning cmd or PowerShell |
-| Spearphishing link (credential harvest) | MAIL, [BROW](samples/browser/phishing-typed-url), PCAP, CLOUD | Click, fake login page, then new sign in |
+| Spearphishing link (credential harvest) | MAIL, [BROW](samples/browser/phishing-typed-url), PCAP | Click, fake login page, then new sign in |
 | HTML smuggling | MAIL, [FILE](samples/attack-files/html-smuggling), BROW, MFT | HTML attachment drops ZIP or ISO in Downloads |
 | ISO, IMG, VHD container delivery | FILE, EVTX, MFT, REG | Mounted drive letter, LNK inside, no MOTW |
 | Malicious LNK delivery | FILE, EXEC, EVTX | LNK target with hidden PowerShell |
@@ -115,7 +113,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Password protected ZIP with payload | MAIL, FILE | Password in email body |
 | CHM, HTA, JS, VBS, WSF attachments | [FILE](samples/attack-files/hta-payload), EVTX, EXEC | mshta, wscript, cscript execution |
 | QR code phishing | MAIL, BROW | Image with URL, mobile sign in |
-| Phishing over Teams or Slack | CLOUD, BROW | External chat message with link |
+| Phishing over Teams or Slack | BROW | External chat message with link |
 | Callback phishing (fake support) | EVTX, PCAP | Remote tool installed after call |
 | Drive by download | [BROW](samples/browser/malicious-download-history), PCAP, MFT | Exploit kit landing page, dropped file |
 | Watering hole | BROW, PCAP | Injected script on trusted site |
@@ -127,13 +125,10 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Log4Shell | WEB, PCAP | jndi ldap strings, LDAP callback |
 | Exposed RDP brute force | EVTX, [PCAP](samples/network/rdp-brute-force) | 4625 storm then 4624 type 10 |
 | Exposed SSH brute force | [LNX](samples/linux-macos/ssh-brute-force-then-login), [PCAP](samples/network/ssh-brute-force) | Failed password lines then accepted |
-| Valid stolen accounts | EVTX, CLOUD | Login from new IP, country, device |
-| Password spraying | EVTX, CLOUD | One password, many users, 4771 or 50126 |
-| Credential stuffing | WEB, CLOUD | Leaked combos against login page |
-| MFA fatigue (push bombing) | CLOUD | Many MFA denied then approved |
-| Adversary in the middle phishing (Evilginx) | CLOUD, BROW, PCAP | Session cookie replay from new IP |
-| Device code phishing | CLOUD | Device code flow sign in |
-| OAuth consent phishing | CLOUD | Consent to unknown app with mail scopes |
+| Valid stolen accounts | EVTX | Login from new IP, country, device |
+| Password spraying | EVTX | One password, many users, 4771 or 50126 |
+| Credential stuffing | WEB | Leaked combos against login page |
+| Adversary in the middle phishing (Evilginx) | BROW, PCAP | Session cookie replay from new IP |
 | Supply chain compromised update | DISK, PCAP, EVTX | Trusted updater spawning odd child |
 | Malicious dependency install | LNX, DISK, PCAP | postinstall script runs curl |
 | Trusted third party (MSP) abuse | EVTX, PCAP | RMM tool from vendor runs commands |
@@ -142,8 +137,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Rogue wireless access point | PCAP | Evil twin beacons, deauth frames |
 | Exposed database or service (Redis, Elastic, Mongo) | PCAP, LNX | Unauth commands from internet IP |
 | Exposed Docker API | PCAP, LNX | Container create from remote IP |
-| Exposed Kubernetes dashboard or API | CLOUD | Anonymous API calls |
-| Insider with legit access | EVTX, REG, CLOUD | Normal user, abnormal volume |
+| Insider with legit access | EVTX, REG | Normal user, abnormal volume |
 
 ### Execution
 
@@ -177,7 +171,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Template injection (remote .dotm) | FILE, PCAP | settings.xml.rels to remote URL |
 | Follina (msdt) | FILE, EVTX | msdt with ms-msdt URL |
 | Container admin command (docker exec) | LNX | Docker daemon logs |
-| Cloud run command (SSM, Azure Run Command) | CLOUD, EVTX | SendCommand or RunCommand events |
+| Cloud run command (SSM, Azure Run Command) | EVTX | SendCommand or RunCommand events |
 | Python, Node, Perl inline payloads | LNX, EVTX | Interpreter with -c argument |
 | Unix shell reverse shell | LNX, [PCAP](samples/network/reverse-shell-plain) | bash -i to /dev/tcp |
 | AutoHotKey and AutoIT scripts | FILE, EXEC | Compiled AutoIT binaries |
@@ -209,7 +203,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Accessibility features abuse | [REG](samples/registry/accessibility-utilman-debugger), MFT | osk, magnify, narrator replaced |
 | Office startup (Normal.dotm, XLSTART, add ins) | MFT, REG | Modified template or new add in |
 | Office test registry key | [REG](samples/registry/office-test-key) | Office test Special Perf key |
-| Outlook rules, forms, home page | REG, CLOUD | Outlook rule launching app |
+| Outlook rules, forms, home page | REG | Outlook rule launching app |
 | Browser extension | [BROW](samples/browser/malicious-extension), REG | Force installed extension |
 | Local account creation | EVTX, REG | 4720, 4732 |
 | Domain account creation | EVTX | 4720 on DC, added to groups |
@@ -243,9 +237,6 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | PAM backdoor | [LNX](samples/linux-macos/pam-backdoor) | Modified pam\_unix.so |
 | Kernel module rootkit | LNX, MEM | Hidden module in memory |
 | macOS LaunchAgent and LaunchDaemon | LNX | New plist in LaunchAgents |
-| Cloud access key creation | CLOUD | CreateAccessKey for other user |
-| Cloud backdoor role or app registration | CLOUD | New service principal secret |
-| Mailbox forwarding rule | CLOUD | New-InboxRule to external |
 
 ### Privilege Escalation
 
@@ -279,10 +270,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Linux kernel exploit (Dirty Pipe, PwnKit) | [LNX](samples/linux-macos/pwnkit-style-escalation), MEM | pkexec crash, odd binaries in tmp |
 | Writable cron or PATH hijack | [LNX](samples/linux-macos/writable-cron-hijack) | Root cron script modified |
 | Docker group or socket escape | [LNX](samples/linux-macos/docker-group-escape) | docker run with host mount |
-| Container escape (privileged container) | LNX, CLOUD | Host namespace access |
-| Cloud IAM escalation (PassRole, attach policy) | CLOUD | AttachUserPolicy, PassRole calls |
-| Azure role assignment escalation | CLOUD | New Owner role assignment |
-| Entra ID privileged role add | CLOUD | Add member to role Global Admin |
+| Container escape (privileged container) | LNX | Host namespace access |
 | Access token manipulation (runas, make token) | EVTX, MEM | 4624 type 9, 4648 |
 
 ### Defense Evasion
@@ -334,8 +322,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Hide artifacts in VM or sandbox evasion | MEM, FILE | Checks for VM drivers |
 | Domain policy change (GPO weaken) | EVTX | 5136 security policy |
 | Code signing abuse | FILE, EVTX | Signed malware |
-| Impair cloud logging | CLOUD | StopLogging, DeleteTrail, diagnostic setting delete |
-| Use of alternate auth material | EVTX, CLOUD | Token reuse with no password events |
+| Use of alternate auth material | EVTX | Token reuse with no password events |
 | Fileless registry stored payload | [REG](samples/registry/fileless-registry-payload), MEM | Large binary value in registry |
 | Steganography in images | [FILE](samples/attack-files/steganography-png), PCAP | Payload hidden in PNG |
 | Virtualization (run VM on victim) | DISK, EVTX | VirtualBox install, VM files |
@@ -383,11 +370,9 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | SSH private key theft | [LNX](samples/linux-macos/ssh-key-theft) | Read of id\_rsa |
 | Linux memory credential dump (mimipenguin) | LNX, MEM | Access to process memory |
 | Network sniffing of cleartext creds | [PCAP](samples/network/cleartext-creds-sniffing) | FTP, Telnet, HTTP basic, POP3 creds |
-| Cloud instance metadata theft (IMDS) | CLOUD, PCAP, WEB | 169.254.169.254 requests, SSRF |
+| Cloud instance metadata theft (IMDS) | PCAP, WEB | 169.254.169.254 requests, SSRF |
 | Cloud keys in code or env files | DISK, [LNX](samples/linux-macos/cloud-creds-file-read) | .aws credentials read |
-| Session token theft (Entra PRT, cookies) | CLOUD, MEM | Token replay from new device |
-| Steal app access token | CLOUD | Token use from odd IP |
-| MFA interception or SIM swap | CLOUD | MFA method change |
+| Session token theft (Entra PRT, cookies) | MEM | Token replay from new device |
 | Forced auth via SCF or LNK in share | PCAP, MFT | SMB auth to attacker from icon path |
 
 ### Discovery
@@ -419,9 +404,6 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Browser bookmark and history discovery | [BROW](samples/browser/bookmark-history-discovery) | Reads of bookmarks file |
 | Password policy and GPO discovery | EVTX, PCAP | SYSVOL reads |
 | Linux recon (id, uname, ps, ss, cat /etc/passwd) | [LNX](samples/linux-macos/linux-recon-commands) | Commands in history or auditd |
-| Cloud recon (enumerate IAM, buckets, VMs) | CLOUD | Burst of List and Describe calls |
-| Azure AD recon (AzureHound, ROADtools) | CLOUD | Graph API burst from one token |
-| Kubernetes recon (kubectl get all) | CLOUD | Audit log list calls |
 
 ### Lateral Movement
 
@@ -448,11 +430,10 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | RMM tools (AnyDesk, TeamViewer, Atera) | EVTX, PCAP, DISK | Install and connection logs |
 | VNC | PCAP, EVTX | 5900 traffic |
 | Cobalt Strike jump and remote exec | EVTX, PCAP, MEM | Random service, named pipes like msagent |
-| Internal spearphishing | MAIL, CLOUD | Internal sender with malicious link |
+| Internal spearphishing | MAIL | Internal sender with malicious link |
 | Taint shared content (LNK in share) | MFT, PCAP | New LNK or EXE on file server |
 | Replication through removable media | REG, MFT | USB with autorun copy |
-| Cloud lateral (assume role, VM serial console) | CLOUD | AssumeRole chain across accounts |
-| Container to host or pod to pod | CLOUD, LNX | kubectl exec into many pods |
+| Container to host or pod to pod | LNX | kubectl exec into many pods |
 | SSH hijack (agent forwarding) | LNX | SSH\_AUTH\_SOCK reuse |
 | Exploitation of remote services (EternalBlue) | PCAP, MEM | SMBv1 trans2 exploit pattern |
 
@@ -465,16 +446,13 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Local file staging | MFT | Many copies into one folder |
 | Remote staging on file server | MFT, PCAP | Large SMB reads into one host |
 | Data from network shares | EVTX, PCAP | 5145 burst on many files |
-| Data from SharePoint and OneDrive | CLOUD | FileDownloaded burst in UAL |
 | Mailbox collection (local PST export) | EVTX, MFT | New PST file |
-| Mailbox collection (cloud, eDiscovery, Graph) | CLOUD | MailItemsAccessed, New-ComplianceSearch |
 | Screen capture | MEM, MFT | Screenshot files, GDI capture |
 | Audio and video capture | REG, MEM | CapabilityAccessManager mic and webcam keys |
 | Keylogging output | MFT | Log file growth |
 | Clipboard data | MEM | Clipboard polling |
 | Database dump | [LNX](samples/linux-macos/database-dump), EVTX, PCAP | mysqldump, sqlcmd export |
-| Code repository clone | CLOUD, PCAP | git clone of many repos |
-| Data from cloud storage (S3 sync) | CLOUD | GetObject burst |
+| Code repository clone | PCAP | git clone of many repos |
 | Browser data collection | [BROW](samples/browser/session-cookie-theft), MFT | Copy of browser profile |
 | Removable media data copy | REG, MFT, EXEC | USB serial, LNK pointing to E drive |
 | Automated collection scripts | EVTX | PowerShell Get-ChildItem by extension |
@@ -521,15 +499,12 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | FTP and SFTP exfil | [PCAP](samples/network/ftp-exfil), LNX | STOR commands |
 | DNS exfil | [PCAP](samples/network/dns-exfil) | Encoded data in queries |
 | ICMP exfil | [PCAP](samples/network/icmp-exfil) | Data in echo payloads |
-| Email exfil | MAIL, CLOUD | Attachments to personal address |
+| Email exfil | MAIL | Attachments to personal address |
 | Exfil to webhook or paste site | [PCAP](samples/network/exfil-to-paste-site), [BROW](samples/browser/paste-site-exfil) | Pastebin, webhook.site posts |
 | Exfil to GitHub or code repo | PCAP | git push to new repo |
 | USB exfil | [REG](samples/registry/usbstor-exfil-device), MFT, EXEC, EVTX | USB serial, LNK to removable drive, 6416 |
 | Bluetooth exfil | REG | Bluetooth device pairing keys |
 | Printing documents | EVTX, DISK | PrintService 307 |
-| Cloud storage share link | CLOUD | AnonymousLinkCreated |
-| Cloud snapshot share to other account | CLOUD | ModifySnapshotAttribute, CreateImage |
-| S3 bucket made public | CLOUD | PutBucketPolicy with public read |
 | Database export over network | PCAP | Big SQL result sets |
 | Scheduled or throttled exfil | [PCAP](samples/network/slow-chunked-exfil) | Small chunks at fixed times |
 | Exfil via steganography | PCAP, FILE | Images uploaded with hidden data |
@@ -543,24 +518,22 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Ransomware on ESXi | LNX, DISK | esxcli vm kill, encrypted vmdk |
 | Ransomware via GPO across domain | EVTX, DISK | Same task on all hosts |
 | Inhibit recovery (vssadmin, wbadmin, bcdedit) | EVTX | Delete shadows, recovery disabled |
-| Backup deletion | EVTX, CLOUD | Backup job delete, vault delete |
+| Backup deletion | EVTX | Backup job delete, vault delete |
 | Disk wipe (wiper malware) | DISK, EVTX | Overwritten MBR and files |
 | MBR overwrite | DISK | Changed sector 0 |
 | Data destruction (cipher, sdelete, rm -rf) | MFT, [LNX](samples/linux-macos/mass-file-deletion) | Mass delete records |
 | Data manipulation | DISK, LNX | Changed DB records or files |
 | Defacement | [WEB](samples/web-logs/defacement), MFT | index page changed |
 | Service stop (databases, AV before encryption) | EVTX | 7036 stops, net stop burst |
-| Account lockout or removal | EVTX, CLOUD | 4740, 4726 mass |
-| Password change of admins | EVTX, CLOUD | 4724 burst |
+| Account lockout or removal | EVTX | 4740, 4726 mass |
+| Password change of admins | EVTX | 4724 burst |
 | System shutdown and reboot | EVTX | 1074, 6006 |
 | Resource hijacking (cryptomining) | [LNX](samples/linux-macos/cryptominer), PCAP, EVTX | xmrig, stratum protocol, high CPU |
-| Cloud cryptomining | CLOUD | RunInstances of GPU types in new regions |
 | DoS flood (SYN, UDP, HTTP) | PCAP, WEB | High rate from many IPs |
 | Application layer DoS (Slowloris) | PCAP, WEB | Many open slow connections |
 | Amplification attack (DNS, NTP, memcached) | PCAP | Large replies to spoofed IP |
 | Firmware corruption | DISK | Modified firmware images |
-| Cloud resource deletion | CLOUD | DeleteBucket, DeleteDBInstance burst |
-| Financial theft (BEC payment change) | MAIL, CLOUD | Bank change request thread |
+| Financial theft (BEC payment change) | MAIL | Bank change request thread |
 | Extortion leak site prep | PCAP | Upload of stolen data |
 
 ### Linux and macOS Attacks
@@ -692,7 +665,7 @@ All of these produce PCAP samples. Add device logs (router, switch, firewall sys
 
 ### Email Attacks
 
-All of these produce MAIL samples (.eml, .msg). Add CLOUD message trace and BROW click history for the full picture.
+All of these produce MAIL samples (.eml, .msg). Add BROW click history for the full picture.
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
