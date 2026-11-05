@@ -2,7 +2,7 @@
 
 ## About
 
-A library of attack samples for DFIR practice. Each sample is a real artifact made in an isolated lab: network captures, event logs, NTFS files, registry hives, memory images, disk images, cloud logs and more. Every sample comes with an answer key so you can check your findings.
+A library of attack samples for DFIR practice. Each sample is a real artifact made in an isolated lab: network captures, event logs, NTFS files, registry hives, memory images, disk images and more. Every sample comes with an answer key so you can check your findings.
 
 Use it to practice investigations, test detection rules, train analysts, or build lab exercises.
 
@@ -171,7 +171,6 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Template injection (remote .dotm) | FILE, PCAP | settings.xml.rels to remote URL |
 | Follina (msdt) | FILE, EVTX | msdt with ms-msdt URL |
 | Container admin command (docker exec) | LNX | Docker daemon logs |
-| Cloud run command (SSM, Azure Run Command) | EVTX | SendCommand or RunCommand events |
 | Python, Node, Perl inline payloads | LNX, EVTX | Interpreter with -c argument |
 | Unix shell reverse shell | LNX, [PCAP](samples/network/reverse-shell-plain) | bash -i to /dev/tcp |
 | AutoHotKey and AutoIT scripts | FILE, EXEC | Compiled AutoIT binaries |
