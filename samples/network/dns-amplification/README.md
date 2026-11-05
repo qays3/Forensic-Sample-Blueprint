@@ -1,42 +1,49 @@
-# dns-amplification
+# Dns Amplification
 
 ## Scenario
-An attacker spoofs the victim's IP (10.10.2.5) and sends small DNS ANY queries to open resolvers. The resolvers send large answers to the victim, amplifying the attack many times over.
 
-## Timeline (UTC+3)
-```
-10:25:00  Spoofed DNS ANY queries sent to public resolvers as 10.10.2.5
-10:25:xx  Large DNS answers flood the victim, many times the query size
-```
+A DNS amplification attack: small ANY queries are sent to open resolvers with the victim's spoofed source, so large replies flood the victim.
+
+Evidence: `dns-amplification.pcap`  
+Capture date: 2020-06-23
+
+## Timeline
+
+~11:03  Small ANY queries to public resolvers spoofed as the victim, large replies sent to the victim.
 
 ## How to spot it
-- Small DNS ANY queries with the victim as the spoofed source
-- Very large DNS answers all arriving at the victim
-- Answers are many times bigger than the queries (amplification)
-- Reflectors are open resolvers, the victim never asked
+
+- ANY queries to open resolvers
+- Source spoofed as the victim
+- Replies much larger than the queries
+- Victim floods with DNS responses it never asked for
 
 ## Questions
+
 ```
-1. Victim (spoofed)?  10.10.2.5
-2. Technique?         DNS amplification/reflection
-3. Query type?        ANY (large answers)
-4. Reflectors?        Open DNS resolvers
-5. Why amplified?     Answer >> query size
+1. Technique?         DNS amplification
+2. Victim?             203.0.113.5
+3. Query?              ANY (small)
+4. Reply?              large (amplified)
+5. Effect?             reflected flood
 ```
 
 ## How to solve it
 
-1. Extract the evidence, password `hidden`: `7z x eb3f368f401dfe6cc0d638acbf21254614ad3358d3f84d81518a9b3a6b7d6cac.zip -phidden`. You get `dns-amplification.pcap`.
+1. Extract the evidence, password `hidden`: `7z x <sha256>.zip -phidden`. You get `dns-amplification.pcap`.
 2. Open `dns-amplification.pcap` in Wireshark.
-3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (DNS queries and answers). Then Statistics > Conversations to see the talkers.
-4. Same filter from the shell with tshark: `tshark -r dns-amplification.pcap -Y "dns"`, and list talkers with `tshark -r dns-amplification.pcap -q -z conv,ip`.
-5. Confirm against the answer: Small DNS ANY queries with the victim as the spoofed source
+3. In Wireshark, paste this into the display filter bar and press Enter: `dns`  (the amplified replies). Then Statistics > Conversations for the talkers.
+4. Same filter from the shell: `tshark -r dns-amplification.pcap -Y "dns"`, and `tshark -r dns-amplification.pcap -q -z conv,ip`.
+5. Confirm against the answer: ANY queries to open resolvers
 
 ## MITRE ATT&CK
-- T1498.002 Network Denial of Service: Reflection Amplification
+
+- T1498.002 Reflection Amplification
 
 ## Tools
-Crafted DNS amplification (scapy) over generated background traffic
+
+Wireshark, tshark, zeek, tcpdump.
 
 ## Signature
+
 Forensic Sample Blueprint | qayssarayra.com

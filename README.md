@@ -69,7 +69,7 @@ Every attack below lists the sample types that capture it, using these codes. Se
 | Nmap NSE script scans | [PCAP](samples/network/nmap-nse-scan), WEB | NSE user agent, script payloads |
 | Masscan high rate scan | [PCAP](samples/network/masscan-high-rate) | Very high packet rate, fixed source port |
 | Vulnerability scan (Nessus, OpenVAS, Nuclei) | [PCAP](samples/network/vulnerability-scan), [WEB](samples/web-logs/web-vulnerability-scanner) | Thousands of probe URLs, scanner user agents |
-| Web directory brute force (Gobuster, ffuf, Dirb) | [WEB](samples/web-logs/directory-brute-force), PCAP | Burst of 404s from one IP |
+| Web directory brute force (Gobuster, ffuf, Dirb) | [WEB](samples/web-logs/directory-brute-force), [PCAP](samples/network/web-dir-brute-force) | Burst of 404s from one IP |
 | Web crawling and spidering | WEB | Fast sequential page hits |
 | Subdomain brute force | [PCAP](samples/network/subdomain-brute-force) | Many NXDOMAIN DNS answers |
 | DNS zone transfer (AXFR) | [PCAP](samples/network/dns-zone-transfer-axfr) | AXFR query over TCP 53 |
@@ -92,20 +92,20 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | Lookalike domain registration | PCAP, MAIL | Typosquat domains in DNS and email links |
-| Newly registered domain for C2 | PCAP | Young domain, cheap TLD, Let's Encrypt cert |
-| Compromised legit site as staging | PCAP, WEB | Payload pulled from real but hacked site |
-| Abuse of cloud storage for payloads | PCAP, BROW | Downloads from Dropbox, OneDrive, GitHub raw, Discord CDN |
+| Newly registered domain for C2 | [PCAP](samples/network/newly-registered-domain-c2) | Young domain, cheap TLD, Let's Encrypt cert |
+| Compromised legit site as staging | [PCAP](samples/network/compromised-site-staging), WEB | Payload pulled from real but hacked site |
+| Abuse of cloud storage for payloads | [PCAP](samples/network/cloud-storage-payload), BROW | Downloads from Dropbox, OneDrive, GitHub raw, Discord CDN |
 | Code signing with stolen cert | FILE, DISK | Signed malware with revoked or odd cert |
 | Malicious browser extension upload | BROW | New extension ID, wide permissions |
-| Malicious npm or PyPI package | DISK, LNX, PCAP | Install scripts fetching payloads |
-| Bulletproof VPS and redirectors | PCAP | Traffic to hosting ASNs known for abuse |
+| Malicious npm or PyPI package | DISK, LNX, [PCAP](samples/network/malicious-package-fetch) | Install scripts fetching payloads |
+| Bulletproof VPS and redirectors | [PCAP](samples/network/redirector-chain) | Traffic to hosting ASNs known for abuse |
 
 ### Initial Access
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | Spearphishing attachment (macro document) | MAIL, FILE, EVTX, EXEC | WINWORD spawning cmd or PowerShell |
-| Spearphishing link (credential harvest) | MAIL, [BROW](samples/browser/phishing-typed-url), PCAP | Click, fake login page, then new sign in |
+| Spearphishing link (credential harvest) | MAIL, [BROW](samples/browser/phishing-typed-url), [PCAP](samples/network/spearphish-credential-harvest) | Click, fake login page, then new sign in |
 | HTML smuggling | MAIL, [FILE](samples/attack-files/html-smuggling), BROW, MFT | HTML attachment drops ZIP or ISO in Downloads |
 | ISO, IMG, VHD container delivery | FILE, EVTX, MFT, REG | Mounted drive letter, LNK inside, no MOTW |
 | Malicious LNK delivery | FILE, EXEC, EVTX | LNK target with hidden PowerShell |
@@ -115,10 +115,10 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | QR code phishing | MAIL, BROW | Image with URL, mobile sign in |
 | Phishing over Teams or Slack | BROW | External chat message with link |
 | Callback phishing (fake support) | EVTX, PCAP | Remote tool installed after call |
-| Drive by download | [BROW](samples/browser/malicious-download-history), PCAP, MFT | Exploit kit landing page, dropped file |
-| Watering hole | BROW, PCAP | Injected script on trusted site |
+| Drive by download | [BROW](samples/browser/malicious-download-history), [PCAP](samples/network/drive-by-download), MFT | Exploit kit landing page, dropped file |
+| Watering hole | BROW, [PCAP](samples/network/watering-hole) | Injected script on trusted site |
 | SEO poisoning fake installer | [BROW](samples/browser/malicious-download-history), FILE, EXEC | Fake software site, signed loader |
-| Malvertising | BROW, PCAP | Ad redirect chain to payload |
+| Malvertising | BROW, [PCAP](samples/network/malvertising) | Ad redirect chain to payload |
 | Exploit public facing web app | WEB, PCAP, LNX, EVTX | Exploit request then webshell or shell |
 | Exploit VPN or firewall appliance (Fortinet, Pulse, Citrix) | PCAP, WEB | Path traversal or RCE strings to appliance |
 | Exploit Exchange (ProxyShell, ProxyLogon) | WEB, EVTX, DISK | Autodiscover abuse, aspx webshell |
@@ -129,14 +129,14 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Password spraying | EVTX | One password, many users, 4771 or 50126 |
 | Credential stuffing | WEB | Leaked combos against login page |
 | Adversary in the middle phishing (Evilginx) | BROW, PCAP | Session cookie replay from new IP |
-| Supply chain compromised update | DISK, PCAP, EVTX | Trusted updater spawning odd child |
-| Malicious dependency install | LNX, DISK, PCAP | postinstall script runs curl |
-| Trusted third party (MSP) abuse | EVTX, PCAP | RMM tool from vendor runs commands |
+| Supply chain compromised update | DISK, [PCAP](samples/network/trojanized-update), EVTX | Trusted updater spawning odd child |
+| Malicious dependency install | LNX, DISK, [PCAP](samples/network/malicious-dependency-callback) | postinstall script runs curl |
+| Trusted third party (MSP) abuse | EVTX, [PCAP](samples/network/msp-remote-access-abuse) | RMM tool from vendor runs commands |
 | Infected USB drop | REG, EVTX, EXEC, MFT | USBSTOR entry, autorun, LNK execution |
 | Rubber Ducky or BadUSB HID attack | REG, EVTX | New keyboard device, fast typed commands |
 | Rogue wireless access point | PCAP | Evil twin beacons, deauth frames |
-| Exposed database or service (Redis, Elastic, Mongo) | PCAP, LNX | Unauth commands from internet IP |
-| Exposed Docker API | PCAP, LNX | Container create from remote IP |
+| Exposed database or service (Redis, Elastic, Mongo) | [PCAP](samples/network/exposed-redis), LNX | Unauth commands from internet IP |
+| Exposed Docker API | [PCAP](samples/network/exposed-docker-api), LNX | Container create from remote IP |
 | Insider with legit access | EVTX, REG | Normal user, abnormal volume |
 
 ### Execution
@@ -144,22 +144,22 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | PowerShell encoded command | [EVTX](samples/windows-event-logs/powershell-encoded-command), MEM | 4104 script block, 4688 with -enc |
-| PowerShell download cradle (IEX, DownloadString) | [EVTX](samples/windows-event-logs/powershell-download-cradle), PCAP | Net.WebClient, Invoke-WebRequest |
+| PowerShell download cradle (IEX, DownloadString) | [EVTX](samples/windows-event-logs/powershell-download-cradle), [PCAP](samples/network/powershell-download-cradle) | Net.WebClient, Invoke-WebRequest |
 | PowerShell without powershell.exe (Unmanaged) | EVTX, MEM | System.Management.Automation.dll in odd process |
 | PowerShell v2 downgrade | EVTX | EngineVersion 2.0 in 400 event |
 | AMSI bypass | [EVTX](samples/windows-event-logs/powershell-amsi-bypass), MEM | amsiInitFailed, patched AmsiScanBuffer |
 | cmd.exe batch scripts | EVTX, EXEC, MFT | .bat in temp, cmd parent chain |
 | WScript and CScript (VBS, JS) | EVTX, EXEC | wscript.exe with script in user path |
-| mshta HTA execution | EVTX, EXEC, PCAP | mshta with URL argument |
+| mshta HTA execution | EVTX, EXEC, [PCAP](samples/network/mshta-hta-download) | mshta with URL argument |
 | rundll32 abuse | [EVTX](samples/windows-event-logs/sysmon-rundll32-dll-load), EXEC | rundll32 with DLL in temp or JS |
-| regsvr32 Squiblydoo | EVTX, PCAP | regsvr32 /i:http scrobj.dll |
-| msiexec remote install | EVTX, PCAP | msiexec /q /i http |
+| regsvr32 Squiblydoo | EVTX, [PCAP](samples/network/regsvr32-squiblydoo) | regsvr32 /i:http scrobj.dll |
+| msiexec remote install | EVTX, [PCAP](samples/network/msiexec-remote-install) | msiexec /q /i http |
 | InstallUtil, MSBuild, RegAsm, RegSvcs | EVTX, EXEC | .NET signed binary running user code |
 | certutil download and decode | [EVTX](samples/windows-event-logs/sysmon-certutil-download), MFT | certutil -urlcache -f, -decode |
 | certreq LOLBin upload | EVTX | certreq -post sends a file to an external server |
 | bitsadmin download | EVTX | BITS Client 59, 60 events |
-| WMIC process call create | EVTX, PCAP | WmiPrvSE spawning cmd |
-| WMIC XSL remote script | EVTX, PCAP | wmic /format:http |
+| WMIC process call create | EVTX, [PCAP](samples/network/wmic-process-call-create) | WmiPrvSE spawning cmd |
+| WMIC XSL remote script | EVTX, [PCAP](samples/network/wmic-xsl-remote) | wmic /format:http |
 | Scheduled task one time run | EVTX, DISK | 4698, Tasks folder XML |
 | Service execution (sc create) | EVTX, REG | 7045, new Services key |
 | Native API and direct syscalls | MEM | Unbacked memory calling syscalls |
@@ -168,14 +168,14 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Office macro (VBA) | FILE, [EVTX](samples/windows-event-logs/office-spawns-powershell) | Office child process, VBA in file |
 | Excel 4.0 (XLM) macros | FILE, EVTX | Hidden macro sheets |
 | DDE in Office | FILE, EVTX | DDEAUTO field |
-| Template injection (remote .dotm) | FILE, PCAP | settings.xml.rels to remote URL |
+| Template injection (remote .dotm) | FILE, [PCAP](samples/network/remote-template-injection) | settings.xml.rels to remote URL |
 | Follina (msdt) | FILE, EVTX | msdt with ms-msdt URL |
 | Container admin command (docker exec) | LNX | Docker daemon logs |
 | Python, Node, Perl inline payloads | LNX, EVTX | Interpreter with -c argument |
 | Unix shell reverse shell | LNX, [PCAP](samples/network/reverse-shell-plain) | bash -i to /dev/tcp |
 | AutoHotKey and AutoIT scripts | FILE, EXEC | Compiled AutoIT binaries |
 | JavaScript in LNK or Windows Script Components | FILE, EVTX | .sct, .wsc files |
-| Inter process via COM (MMC20, ShellWindows) | EVTX, PCAP | DCOM spawning mmc or explorer child |
+| Inter process via COM (MMC20, ShellWindows) | EVTX, [PCAP](samples/network/com-interprocess-exec) | DCOM spawning mmc or explorer child |
 | Exploitation for client execution (browser, PDF reader) | MEM, EVTX | Browser or reader spawning shell |
 
 ### Persistence
@@ -227,7 +227,7 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Exchange transport agent | DISK, EVTX | Unknown transport agent |
 | Bootkit and MBR or VBR change | DISK | Modified boot sectors |
 | UEFI implant | DISK | Changed ESP files |
-| Remote access tool install (AnyDesk, ScreenConnect) | EVTX, REG, PCAP | New service and outbound to vendor |
+| Remote access tool install (AnyDesk, ScreenConnect) | EVTX, REG, [PCAP](samples/network/remote-access-tool-install) | New service and outbound to vendor |
 | Linux cron job | [LNX](samples/linux-macos/cron-persistence) | New crontab line |
 | Linux systemd service or timer | [LNX](samples/linux-macos/systemd-service-persistence) | New unit file |
 | SSH authorized\_keys | [LNX](samples/linux-macos/authorized-keys-persistence) | New key line, file mtime |
@@ -337,11 +337,11 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | SAM and SYSTEM hive dump | EVTX, MFT | reg save HKLM\\SAM |
 | LSA secrets and cached creds dump | REG, MEM | SECURITY hive access |
 | NTDS.dit theft (ntdsutil IFM, vssadmin) | EVTX, MFT | ntdsutil, shadow copy create, 325 ESENT |
-| DCSync | EVTX, PCAP | 4662 with replication GUIDs from non DC |
+| DCSync | EVTX, [PCAP](samples/network/dcsync-drsuapi) | 4662 with replication GUIDs from non DC |
 | DCShadow | EVTX, PCAP | New DC object registered then removed |
 | Kerberoasting | EVTX, [PCAP](samples/network/kerberoasting-traffic) | 4769 RC4 (0x17) for SPN accounts |
 | AS-REP roasting | EVTX, [PCAP](samples/network/asrep-roasting-traffic) | 4768 with no preauth |
-| Kerberos brute force | EVTX, PCAP | 4771 failures |
+| Kerberos brute force | EVTX, [PCAP](samples/network/kerberos-brute-force) | 4771 failures |
 | Password spraying (LDAP, SMB, Kerberos) | EVTX, [PCAP](samples/network/password-spray) | One password, many accounts |
 | Brute force local | EVTX | 4625 burst |
 | LLMNR and NBT-NS poisoning (Responder) | [PCAP](samples/network/llmnr-nbtns-poisoning), EVTX | Spoofed name replies, NTLM hash capture |
@@ -369,31 +369,31 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | SSH private key theft | [LNX](samples/linux-macos/ssh-key-theft) | Read of id\_rsa |
 | Linux memory credential dump (mimipenguin) | LNX, MEM | Access to process memory |
 | Network sniffing of cleartext creds | [PCAP](samples/network/cleartext-creds-sniffing) | FTP, Telnet, HTTP basic, POP3 creds |
-| Cloud instance metadata theft (IMDS) | PCAP, WEB | 169.254.169.254 requests, SSRF |
+| Cloud instance metadata theft (IMDS) | [PCAP](samples/network/imds-credential-theft), WEB | 169.254.169.254 requests, SSRF |
 | Cloud keys in code or env files | DISK, [LNX](samples/linux-macos/cloud-creds-file-read) | .aws credentials read |
 | Session token theft (Entra PRT, cookies) | MEM | Token replay from new device |
-| Forced auth via SCF or LNK in share | PCAP, MFT | SMB auth to attacker from icon path |
+| Forced auth via SCF or LNK in share | [PCAP](samples/network/forced-auth-share), MFT | SMB auth to attacker from icon path |
 
 ### Discovery
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
 | System info (systeminfo, hostname, ver) | EVTX, EXEC | Burst of recon commands |
-| User and group enum (net user, net group) | EVTX, PCAP | net.exe and SAMR calls |
-| Domain admins enum | EVTX, PCAP | net group domain admins /domain |
+| User and group enum (net user, net group) | EVTX, [PCAP](samples/network/samr-user-group-enum) | net.exe and SAMR calls |
+| Domain admins enum | EVTX, [PCAP](samples/network/domain-admins-enum) | net group domain admins /domain |
 | Domain trust enum (nltest) | EVTX | nltest /domain\_trusts |
-| BloodHound and SharpHound collection | EVTX, PCAP, MFT | Huge LDAP query burst, zip output file |
+| BloodHound and SharpHound collection | EVTX, [PCAP](samples/network/sharphound-ldap-burst), MFT | Huge LDAP query burst, zip output file |
 | AdFind | EVTX, EXEC | adfind.exe with filters |
 | PowerView | [EVTX](samples/windows-event-logs/powershell-domain-recon-powerview) | 4104 with Get-Domain cmdlets |
-| LDAP recon queries | PCAP, EVTX | 1644 expensive queries |
-| Network share enum (net view, SharpShares) | EVTX, PCAP | 5140 across many hosts |
-| Internal port scan | PCAP, EVTX | One host hitting many internal IPs |
+| LDAP recon queries | [PCAP](samples/network/ldap-recon-queries), EVTX | 1644 expensive queries |
+| Network share enum (net view, SharpShares) | EVTX, [PCAP](samples/network/network-share-enum) | 5140 across many hosts |
+| Internal port scan | [PCAP](samples/network/internal-port-scan), EVTX | One host hitting many internal IPs |
 | Network config (ipconfig, route, arp) | EVTX | Recon command chain |
 | Network connections (netstat) | EVTX | netstat -ano |
 | Process discovery (tasklist) | EVTX | tasklist /v |
 | Security software discovery | EVTX, REG | WMI AntiVirusProduct query |
 | Installed software enum | EVTX, REG | Uninstall keys read |
-| Remote system discovery (ping sweep internal) | PCAP | ICMP to subnet |
+| Remote system discovery (ping sweep internal) | [PCAP](samples/network/ping-sweep-internal) | ICMP to subnet |
 | Account policy discovery | EVTX | net accounts |
 | File and directory discovery | EVTX, REG | dir /s, tree, ShellBags |
 | Query registry | EVTX | reg query of keys |
@@ -401,36 +401,36 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | System time discovery | EVTX | net time, w32tm |
 | Virtualization and sandbox check | MEM, FILE | VM artifact queries |
 | Browser bookmark and history discovery | [BROW](samples/browser/bookmark-history-discovery) | Reads of bookmarks file |
-| Password policy and GPO discovery | EVTX, PCAP | SYSVOL reads |
+| Password policy and GPO discovery | EVTX, [PCAP](samples/network/password-policy-discovery) | SYSVOL reads |
 | Linux recon (id, uname, ps, ss, cat /etc/passwd) | [LNX](samples/linux-macos/linux-recon-commands) | Commands in history or auditd |
 
 ### Lateral Movement
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| PsExec (Sysinternals) | [EVTX](samples/windows-event-logs/psexec-service), REG, PCAP, EXEC | 7045 PSEXESVC, ADMIN$ write, 4624 type 3 |
-| Impacket psexec, smbexec, atexec | EVTX, PCAP | Random service names, output to ADMIN$ |
-| Impacket wmiexec | EVTX, PCAP | WmiPrvSE cmd with output to ADMIN$ |
-| Impacket dcomexec | EVTX, PCAP | MMC20 DCOM spawning cmd |
-| WMI remote process | EVTX, PCAP | 4624 type 3, WMI activity events |
-| WinRM and PowerShell remoting | EVTX, PCAP | wsmprovhost.exe, 5985 traffic, 91 and 168 events |
-| RDP | EVTX, PCAP, REG | 4624 type 10, 1149, 21, 22, 25 |
+| PsExec (Sysinternals) | [EVTX](samples/windows-event-logs/psexec-service), REG, [PCAP](samples/network/psexec-smb), EXEC | 7045 PSEXESVC, ADMIN$ write, 4624 type 3 |
+| Impacket psexec, smbexec, atexec | EVTX, [PCAP](samples/network/impacket-smbexec) | Random service names, output to ADMIN$ |
+| Impacket wmiexec | EVTX, [PCAP](samples/network/wmiexec-dcerpc) | WmiPrvSE cmd with output to ADMIN$ |
+| Impacket dcomexec | EVTX, [PCAP](samples/network/impacket-dcomexec) | MMC20 DCOM spawning cmd |
+| WMI remote process | EVTX, [PCAP](samples/network/wmi-remote-process) | 4624 type 3, WMI activity events |
+| WinRM and PowerShell remoting | EVTX, [PCAP](samples/network/winrm-remoting-traffic) | wsmprovhost.exe, 5985 traffic, 91 and 168 events |
+| RDP | EVTX, [PCAP](samples/network/rdp-connection), REG | 4624 type 10, 1149, 21, 22, 25 |
 | RDP hijack (tscon) | EVTX | tscon as SYSTEM |
-| SSH lateral (Linux) | [LNX](samples/linux-macos/ssh-lateral-movement), PCAP | Accepted publickey from internal host |
-| SMB admin share copy | EVTX, PCAP, MFT | 5145 C$ writes |
-| Remote scheduled task | EVTX, PCAP | 4698 from remote, ATSVC pipe |
-| Remote service creation (sc \\host) | EVTX, PCAP | 7045 from SVCCTL pipe |
-| Remote registry changes | EVTX, PCAP | winreg pipe use |
-| DCOM (ShellWindows, ShellBrowserWindow) | EVTX, PCAP | explorer child from DCOM |
+| SSH lateral (Linux) | [LNX](samples/linux-macos/ssh-lateral-movement), [PCAP](samples/network/ssh-lateral) | Accepted publickey from internal host |
+| SMB admin share copy | EVTX, [PCAP](samples/network/smb-admin-share-copy), MFT | 5145 C$ writes |
+| Remote scheduled task | EVTX, [PCAP](samples/network/remote-scheduled-task) | 4698 from remote, ATSVC pipe |
+| Remote service creation (sc \\host) | EVTX, [PCAP](samples/network/remote-service-creation) | 7045 from SVCCTL pipe |
+| Remote registry changes | EVTX, [PCAP](samples/network/remote-registry) | winreg pipe use |
+| DCOM (ShellWindows, ShellBrowserWindow) | EVTX, [PCAP](samples/network/dcom-lateral) | explorer child from DCOM |
 | Pass the Hash lateral | EVTX | 4624 NTLM type 3 with admin |
 | Pass the Ticket lateral | EVTX | Kerberos logon with no TGT request |
 | SCCM or software deployment abuse | EVTX, DISK | Package pushed to many hosts |
 | GPO deployment of malware | EVTX, DISK | SYSVOL script then many hosts run it |
-| RMM tools (AnyDesk, TeamViewer, Atera) | EVTX, PCAP, DISK | Install and connection logs |
-| VNC | PCAP, EVTX | 5900 traffic |
+| RMM tools (AnyDesk, TeamViewer, Atera) | EVTX, [PCAP](samples/network/rmm-tool-traffic), DISK | Install and connection logs |
+| VNC | [PCAP](samples/network/vnc-session), EVTX | 5900 traffic |
 | Cobalt Strike jump and remote exec | EVTX, PCAP, MEM | Random service, named pipes like msagent |
 | Internal spearphishing | MAIL | Internal sender with malicious link |
-| Taint shared content (LNK in share) | MFT, PCAP | New LNK or EXE on file server |
+| Taint shared content (LNK in share) | MFT, [PCAP](samples/network/taint-shared-content) | New LNK or EXE on file server |
 | Replication through removable media | REG, MFT | USB with autorun copy |
 | Container to host or pod to pod | LNX | kubectl exec into many pods |
 | SSH hijack (agent forwarding) | LNX | SSH\_AUTH\_SOCK reuse |
@@ -443,15 +443,15 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Archive with 7zip, WinRAR, zip | EVTX, MFT, EXEC | Big archive in temp or ProgramData |
 | Password protected archive | EVTX, FILE | rar a -hp |
 | Local file staging | MFT | Many copies into one folder |
-| Remote staging on file server | MFT, PCAP | Large SMB reads into one host |
-| Data from network shares | EVTX, PCAP | 5145 burst on many files |
+| Remote staging on file server | MFT, [PCAP](samples/network/remote-share-staging) | Large SMB reads into one host |
+| Data from network shares | EVTX, [PCAP](samples/network/data-from-network-shares) | 5145 burst on many files |
 | Mailbox collection (local PST export) | EVTX, MFT | New PST file |
 | Screen capture | MEM, MFT | Screenshot files, GDI capture |
 | Audio and video capture | REG, MEM | CapabilityAccessManager mic and webcam keys |
 | Keylogging output | MFT | Log file growth |
 | Clipboard data | MEM | Clipboard polling |
-| Database dump | [LNX](samples/linux-macos/database-dump), EVTX, PCAP | mysqldump, sqlcmd export |
-| Code repository clone | PCAP | git clone of many repos |
+| Database dump | [LNX](samples/linux-macos/database-dump), EVTX, [PCAP](samples/network/database-dump) | mysqldump, sqlcmd export |
+| Code repository clone | [PCAP](samples/network/repo-clone-exfil) | git clone of many repos |
 | Browser data collection | [BROW](samples/browser/session-cookie-theft), MFT | Copy of browser profile |
 | Removable media data copy | REG, MFT, EXEC | USB serial, LNK pointing to E drive |
 | Automated collection scripts | EVTX | PowerShell Get-ChildItem by extension |
@@ -463,51 +463,51 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | HTTP beaconing | [PCAP](samples/network/http-beacon-jitter), MEM | Regular interval, same size requests |
 | HTTPS beaconing | [PCAP](samples/network/https-beacon-self-signed) | JA3 and JA4 hash, self signed cert |
 | Cobalt Strike default profile | [PCAP](samples/network/cobalt-strike-like-profile), MEM | Known URIs, beacon config in memory |
-| Sliver, Havoc, Mythic, Brute Ratel | PCAP, MEM | Framework specific URIs and certs |
-| Metasploit Meterpreter | PCAP, MEM | Port 4444, reflective DLL in memory |
-| Empire and PowerShell C2 | PCAP, [EVTX](samples/windows-event-logs/powershell-reverse-shell) | Base64 cookies, 4104 stagers |
-| DNS C2 and tunneling (dnscat2, iodine) | PCAP | Long random subdomains, TXT records |
+| Sliver, Havoc, Mythic, Brute Ratel | [PCAP](samples/network/c2-sliver-beacon), MEM | Framework specific URIs and certs |
+| Metasploit Meterpreter | [PCAP](samples/network/meterpreter-4444), MEM | Port 4444, reflective DLL in memory |
+| Empire and PowerShell C2 | [PCAP](samples/network/empire-http-c2), [EVTX](samples/windows-event-logs/powershell-reverse-shell) | Base64 cookies, 4104 stagers |
+| DNS C2 and tunneling (dnscat2, iodine) | [PCAP](samples/network/dnscat2-tunnel) | Long random subdomains, TXT records |
 | DNS over HTTPS C2 | [PCAP](samples/network/dns-over-https-c2) | Traffic to DoH resolvers from odd process |
 | ICMP tunneling | [PCAP](samples/network/icmp-tunnel) | Large or patterned ICMP payloads |
 | Domain fronting | [PCAP](samples/network/domain-fronting) | SNI differs from Host header |
-| CDN and cloud fronted C2 | PCAP | Beacons to CloudFront, Azure edge |
+| CDN and cloud fronted C2 | [PCAP](samples/network/cdn-fronted-c2) | Beacons to CloudFront, Azure edge |
 | C2 over legit web services (Telegram, Discord, Slack, GitHub) | [PCAP](samples/network/c2-over-telegram), MEM | API calls from non browser process |
-| C2 over email | MAIL, PCAP | IMAP polling by malware |
+| C2 over email | MAIL, [PCAP](samples/network/c2-over-email-imap) | IMAP polling by malware |
 | SMB named pipe peer to peer C2 | [PCAP](samples/network/smb-named-pipe-c2), MEM | Pipe names between internal hosts |
 | Reverse SSH tunnel | [PCAP](samples/network/reverse-ssh-tunnel), LNX | ssh -R to external host |
-| Proxy and port forward (chisel, ligolo, plink) | PCAP, EVTX, MFT | New binary and long lived connection |
+| Proxy and port forward (chisel, ligolo, plink) | [PCAP](samples/network/chisel-port-forward), EVTX, MFT | New binary and long lived connection |
 | SOCKS proxy through compromised host | [PCAP](samples/network/socks-proxy-pivot) | Many internal connections from one host |
 | Tor C2 | [PCAP](samples/network/tor-traffic) | Tor node IPs, tor.exe |
 | Ngrok and tunneling services | [PCAP](samples/network/ngrok-tunnel) | ngrok.io domains |
 | Non standard port | [PCAP](samples/network/non-standard-port-c2) | HTTP over 8443, 53 non DNS |
-| Protocol impersonation | PCAP | Fake TLS or HTTP |
+| Protocol impersonation | [PCAP](samples/network/protocol-impersonation) | Fake TLS or HTTP |
 | Fast flux and DGA domains | [PCAP](samples/network/dga-domains) | Many random domain lookups, NXDOMAIN |
-| Ingress tool transfer | PCAP, MFT, [EVTX](samples/windows-event-logs/sysmon-powershell-external-c2) | Download then new file and execution |
-| Remote access software as C2 | PCAP, EVTX | AnyDesk, ScreenConnect sessions |
+| Ingress tool transfer | [PCAP](samples/network/ingress-tool-transfer), MFT, [EVTX](samples/windows-event-logs/sysmon-powershell-external-c2) | Download then new file and execution |
+| Remote access software as C2 | [PCAP](samples/network/rmm-as-c2), EVTX | AnyDesk, ScreenConnect sessions |
 | WebSocket C2 | [PCAP](samples/network/websocket-c2) | Upgrade headers to odd host |
-| Covert channel in headers or cookies | PCAP | Encoded data in cookies |
+| Covert channel in headers or cookies | [PCAP](samples/network/covert-channel-cookies) | Encoded data in cookies |
 
 ### Exfiltration
 
 | Attack | Samples | Key evidence |
 | --- | --- | --- |
-| Exfil over C2 channel | PCAP, EXEC | Large upload on beacon channel, SRUM bytes sent |
+| Exfil over C2 channel | [PCAP](samples/network/exfil-over-c2-channel), EXEC | Large upload on beacon channel, SRUM bytes sent |
 | Exfil over HTTP POST | [PCAP](samples/network/http-post-exfil), WEB | Big POST bodies |
-| Rclone to cloud (Mega, S3, Dropbox) | EVTX, PCAP, MFT | rclone.conf, rclone.exe in Prefetch |
-| MEGAsync, WinSCP, FileZilla | EXEC, REG, PCAP | Tool install and big uploads |
+| Rclone to cloud (Mega, S3, Dropbox) | EVTX, [PCAP](samples/network/rclone-exfil), MFT | rclone.conf, rclone.exe in Prefetch |
+| MEGAsync, WinSCP, FileZilla | EXEC, REG, [PCAP](samples/network/winscp-sftp-exfil) | Tool install and big uploads |
 | FTP and SFTP exfil | [PCAP](samples/network/ftp-exfil), LNX | STOR commands |
 | DNS exfil | [PCAP](samples/network/dns-exfil) | Encoded data in queries |
 | ICMP exfil | [PCAP](samples/network/icmp-exfil) | Data in echo payloads |
 | Email exfil | MAIL | Attachments to personal address |
 | Exfil to webhook or paste site | [PCAP](samples/network/exfil-to-paste-site), [BROW](samples/browser/paste-site-exfil) | Pastebin, webhook.site posts |
-| Exfil to GitHub or code repo | PCAP | git push to new repo |
+| Exfil to GitHub or code repo | [PCAP](samples/network/github-exfil) | git push to new repo |
 | USB exfil | [REG](samples/registry/usbstor-exfil-device), MFT, EXEC, EVTX | USB serial, LNK to removable drive, 6416 |
 | Bluetooth exfil | REG | Bluetooth device pairing keys |
 | Printing documents | EVTX, DISK | PrintService 307 |
-| Database export over network | PCAP | Big SQL result sets |
+| Database export over network | [PCAP](samples/network/database-exfil) | Big SQL result sets |
 | Scheduled or throttled exfil | [PCAP](samples/network/slow-chunked-exfil) | Small chunks at fixed times |
-| Exfil via steganography | PCAP, FILE | Images uploaded with hidden data |
-| Insider personal email upload | [BROW](samples/browser/personal-email-upload), PCAP | Gmail upload of company files |
+| Exfil via steganography | [PCAP](samples/network/steganography-exfil), FILE | Images uploaded with hidden data |
+| Insider personal email upload | [BROW](samples/browser/personal-email-upload), [PCAP](samples/network/gmail-upload-exfil) | Gmail upload of company files |
 
 ### Impact
 
@@ -527,13 +527,13 @@ Most of this stage happens on attacker infrastructure, so samples show its trace
 | Account lockout or removal | EVTX | 4740, 4726 mass |
 | Password change of admins | EVTX | 4724 burst |
 | System shutdown and reboot | EVTX | 1074, 6006 |
-| Resource hijacking (cryptomining) | [LNX](samples/linux-macos/cryptominer), PCAP, EVTX | xmrig, stratum protocol, high CPU |
-| DoS flood (SYN, UDP, HTTP) | PCAP, WEB | High rate from many IPs |
-| Application layer DoS (Slowloris) | PCAP, WEB | Many open slow connections |
-| Amplification attack (DNS, NTP, memcached) | PCAP | Large replies to spoofed IP |
+| Resource hijacking (cryptomining) | [LNX](samples/linux-macos/cryptominer), [PCAP](samples/network/cryptominer-stratum), EVTX | xmrig, stratum protocol, high CPU |
+| DoS flood (SYN, UDP, HTTP) | [PCAP](samples/network/syn-flood), WEB | High rate from many IPs |
+| Application layer DoS (Slowloris) | [PCAP](samples/network/slowloris), WEB | Many open slow connections |
+| Amplification attack (DNS, NTP, memcached) | [PCAP](samples/network/dns-amplification) | Large replies to spoofed IP |
 | Firmware corruption | DISK | Modified firmware images |
 | Financial theft (BEC payment change) | MAIL | Bank change request thread |
-| Extortion leak site prep | PCAP | Upload of stolen data |
+| Extortion leak site prep | [PCAP](samples/network/leak-site-upload) | Upload of stolen data |
 
 ### Linux and macOS Attacks
 
@@ -543,8 +543,8 @@ Linux items already listed in earlier sections are not repeated here.
 | --- | --- | --- |
 | Webshell on Linux web server | WEB, LNX, DISK | www-data spawning bash |
 | Reverse shell (bash, nc, python, socat) | [LNX](samples/linux-macos/reverse-shell-from-webapp), [PCAP](samples/network/reverse-shell-plain) | Outbound shell to odd port |
-| Bind shell | [LNX](samples/linux-macos/bind-shell), PCAP | New listener on high port |
-| Cryptominer dropper (curl pipe sh) | [LNX](samples/linux-macos/curl-pipe-sh-dropper), PCAP | curl or wget to /tmp then chmod +x |
+| Bind shell | [LNX](samples/linux-macos/bind-shell), [PCAP](samples/network/bind-shell) | New listener on high port |
+| Cryptominer dropper (curl pipe sh) | [LNX](samples/linux-macos/curl-pipe-sh-dropper), [PCAP](samples/network/cryptominer-dropper) | curl or wget to /tmp then chmod +x |
 | Malware in /tmp or /dev/shm | [LNX](samples/linux-macos/binary-in-tmp-devshm), DISK | Executable in memory backed folders |
 | Deleted running binary | LNX, MEM | /proc/pid/exe shows deleted |
 | Fileless memfd\_create execution | LNX, MEM | memfd: in process maps |
@@ -552,7 +552,7 @@ Linux items already listed in earlier sections are not repeated here.
 | Diamorphine and Reptile rootkits | MEM, LNX | Hidden module, hooked syscalls |
 | eBPF malware | MEM, LNX | Unknown loaded BPF programs |
 | SSH backdoored binary | DISK, LNX | Changed sshd hash |
-| SSH brute force botnet (Mirai style) | LNX, PCAP | Telnet and SSH brute force then busybox |
+| SSH brute force botnet (Mirai style) | LNX, [PCAP](samples/network/ssh-brute-force) | Telnet and SSH brute force then busybox |
 | Docker container breakout | LNX, DISK | Host files written from container |
 | Malicious Docker image | DISK, LNX | Image with miner layer |
 | Auditd evasion | [LNX](samples/linux-macos/auditd-disabled) | Rules removed |
